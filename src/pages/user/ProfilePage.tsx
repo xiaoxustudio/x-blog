@@ -10,7 +10,7 @@ import {
 	CardHeader,
 	CardTitle
 } from "@/components/ui/card";
-import useUser from "@/store/useUser"; // 假设你的 useUser store 在这里
+import useUser from "@/store/useUser";
 
 export default function ProfilePage() {
 	const [pageMode, setPageMode] = useState<"login" | "register">("login");
@@ -40,17 +40,17 @@ export default function ProfilePage() {
 			<Card className="w-full max-w-md">
 				<CardHeader>
 					<CardTitle>
-						{pageMode !== "login" ? "登录" : "注册"}
+						{pageMode === "login" ? "登录" : "注册"}
 					</CardTitle>
 					<CardDescription>
-						{pageMode !== "login"
+						{pageMode === "login"
 							? "输入您的邮箱以登录您的账户"
 							: "创建一个新账户以开始使用"}
 					</CardDescription>
 				</CardHeader>
 				<form onSubmit={handleSubmit}>
 					<CardContent className="space-y-4">
-						{pageMode === "login" && (
+						{!(pageMode === "login") && (
 							<div className="space-y-2">
 								<Label htmlFor="name">用户名</Label>
 								<Input
@@ -93,7 +93,7 @@ export default function ProfilePage() {
 						>
 							{isLoading
 								? "处理中..."
-								: pageMode !== "login"
+								: pageMode === "login"
 									? "登录"
 									: "注册"}
 						</Button>
