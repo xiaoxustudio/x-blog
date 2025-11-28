@@ -7,13 +7,10 @@ import { postsData } from "@/data/posts";
 import "./ArticleDetailPage.css";
 
 function ArticleDetailPage() {
-	// useParams 会从 URL 中解析出动态参数，例如 { id: '1' }
 	const { id } = useParams<{ id: string }>();
 
-	// 根据 id 查找对应的文章
 	const post = postsData.find((p) => p.id === Number(id));
 
-	// 如果找不到文章，显示一个 404 提示
 	if (!post) {
 		return (
 			<div className="container mx-auto px-4 py-12 text-center">
@@ -28,10 +25,8 @@ function ArticleDetailPage() {
 		);
 	}
 
-	// 找到文章，渲染详情页
 	return (
 		<div className="container mx-auto px-4 py-12 max-w-4xl">
-			{/* 返回按钮 */}
 			<Link to="/articles">
 				<Button variant="ghost" className="mb-6">
 					<ArrowLeft className="mr-2 h-4 w-4" />
@@ -40,7 +35,6 @@ function ArticleDetailPage() {
 			</Link>
 
 			<article>
-				{/* 文章头部信息 */}
 				<header className="mb-8">
 					<h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
 						{post.title}
@@ -60,16 +54,13 @@ function ArticleDetailPage() {
 					</div>
 				</header>
 
-				{/* 文章封面图 */}
 				<img
 					src={post.coverImage}
 					alt={post.title}
 					className="w-full h-64 md:h-96 object-cover rounded-lg mb-8"
 				/>
 
-				{/* 文章正文 */}
 				<div className="prose prose-lg max-w-none">
-					{/* 使用 react-markdown 渲染 Markdown 内容 */}
 					<ReactMarkdown>{post.content}</ReactMarkdown>
 				</div>
 			</article>

@@ -21,13 +21,11 @@ function App() {
 				<Header />
 				<main>
 					<Routes>
-						{/* 首页路由 */}
 						<Route
 							path="/"
 							element={
 								<>
 									<Hero />
-									{/* ... 首页内容 ... */}
 									<section className="py-12 md:py-24">
 										<div className="container mx-auto px-4">
 											<h2 className="text-3xl font-bold tracking-tight mb-8">
@@ -65,19 +63,15 @@ function App() {
 							}
 						/>
 
-						{/* 文章列表页路由 */}
 						<Route path="/articles" element={<ArticlesPage />} />
 
-						{/* 分类页路由 */}
 						<Route
 							path="/categories"
 							element={<CategoriesPage />}
 						/>
 
-						{/* 我的页面路由 */}
 						<Route path="/profile" element={<ProfilePage />} />
 
-						{/* 文章详情页动态路由 */}
 						<Route
 							path="/articles/:id"
 							element={<ArticleDetailPage />}

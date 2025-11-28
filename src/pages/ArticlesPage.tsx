@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "react-router-dom"; // 引入 useSearchParams
+import { useSearchParams } from "react-router-dom";
 import { PostCard } from "@/components/PostCard";
 import { Button } from "@/components/ui/button";
 import { postsData, tagsData } from "@/data/posts";
@@ -7,11 +7,10 @@ import { postsData, tagsData } from "@/data/posts";
 const allTags = tagsData.map((t) => t.name);
 
 function ArticlesPage() {
-	const [searchParams, setSearchParams] = useSearchParams(); // 获取 URL 查询参数
+	const [searchParams, setSearchParams] = useSearchParams();
 	const initialTag = searchParams.get("tag");
 	const [selectedTag, setSelectedTag] = useState<string | null>(initialTag);
 
-	// 当 URL 参数变化时，同步更新内部状态
 	useEffect(() => {
 		setSelectedTag(initialTag);
 	}, [initialTag]);
@@ -26,9 +25,9 @@ function ArticlesPage() {
 	const handleTagClick = (tag: string | null) => {
 		setSelectedTag(tag);
 		if (tag) {
-			setSearchParams({ tag }); // 更新 URL
+			setSearchParams({ tag });
 		} else {
-			setSearchParams({}); // 清除 URL 参数
+			setSearchParams({});
 		}
 	};
 
@@ -44,7 +43,6 @@ function ArticlesPage() {
 				</p>
 			)}
 
-			{/* 分类筛选器 */}
 			<div className="mb-8 flex flex-wrap gap-2">
 				<Button
 					variant={selectedTag === null ? "default" : "outline"}
@@ -63,7 +61,6 @@ function ArticlesPage() {
 				))}
 			</div>
 
-			{/* 文章列表 */}
 			{filteredPosts.length > 0 ? (
 				<div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
 					{filteredPosts.map((post) => (

@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/card";
 
 function CategoriesPage() {
-	// 使用 useMemo 计算每个分类的文章数量
 	const tagCounts = useMemo(() => {
 		const counts: { [key: string]: number } = {};
 		postsData.forEach((post) => {
@@ -22,7 +21,6 @@ function CategoriesPage() {
 		return counts;
 	}, []);
 
-	// 为每个分类标签计算随机的大小，以创建标签云效果
 	const getTagSize = (count: number) => {
 		const sizes = [
 			"text-sm",
@@ -32,7 +30,6 @@ function CategoriesPage() {
 			"text-2xl",
 			"text-3xl"
 		];
-		// 根据文章数量映射到大小索引，这里简单处理，可以根据最大文章数动态计算
 		const index = Math.min(count - 1, sizes.length - 1);
 		return sizes[index] || sizes[0];
 	};
@@ -46,7 +43,6 @@ function CategoriesPage() {
 				</p>
 			</div>
 
-			{/* 分类标签云 */}
 			<div className="flex flex-wrap justify-center gap-4 mb-16">
 				{tagsData.map((tag) => {
 					const count = tagCounts[tag.name] || 0;
@@ -68,7 +64,6 @@ function CategoriesPage() {
 				})}
 			</div>
 
-			{/* 分类详细信息卡片 */}
 			<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 				{tagsData.map((tag) => {
 					const count = tagCounts[tag.name] || 0;
