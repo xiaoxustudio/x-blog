@@ -6,22 +6,11 @@ import { PostCard } from "./components/PostCard";
 import { Footer } from "./components/Footer";
 import { postsData } from "./data/posts";
 
-// 引入页面组件
 import ArticlesPage from "./pages/ArticlesPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import ArticleDetailPage from "./pages/ArticleDetailPage";
+import ProfilePage from "./pages/user/ProfilePage";
 
-// 创建一个简单的“我的”页面占位符
-const ProfilePage = () => (
-	<div className="container mx-auto px-4 py-12">
-		<h1 className="text-4xl font-bold">我的主页</h1>
-		<p className="mt-4 text-muted-foreground">
-			这里可以显示个人信息、设置等。
-		</p>
-	</div>
-);
-
-// ... 筛选逻辑保持不变 ...
 const featuredPosts = postsData.filter((post) => post.featured);
 const regularPosts = postsData.filter((post) => !post.featured);
 
