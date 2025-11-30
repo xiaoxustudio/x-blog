@@ -4,7 +4,7 @@ export interface IUser {
 	email: string;
 	password: string;
 	nickname: string;
-	avatar: string;
+	avatar: string; // base64
 	createdAt: Date;
 	updatedAt: Date;
 }
