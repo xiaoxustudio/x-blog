@@ -10,6 +10,8 @@ import ArticlesPage from "./pages/ArticlesPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import ArticleDetailPage from "./pages/ArticleDetailPage";
 import ProfilePage from "./pages/user/ProfilePage";
+import ProfileEditPage from "./pages/user/EditePage";
+import { Toaster } from "sonner";
 
 const featuredPosts = postsData.filter((post) => post.featured);
 const regularPosts = postsData.filter((post) => !post.featured);
@@ -71,6 +73,7 @@ function App() {
 						/>
 
 						<Route path="/profile" element={<ProfilePage />} />
+						<Route path="/edit" element={<ProfileEditPage />} />
 
 						<Route
 							path="/articles/:id"
@@ -79,6 +82,7 @@ function App() {
 					</Routes>
 				</main>
 				<Footer />
+				<Toaster />
 			</div>
 		</Router>
 	);

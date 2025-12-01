@@ -15,6 +15,7 @@ import Login from "@/apis/user/login";
 import GetInfo from "@/apis/user/info";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfilePage() {
 	const [pageMode, setPageMode] = useState<"login" | "register">("login");
@@ -25,6 +26,8 @@ export default function ProfilePage() {
 	const [password, setPassword] = useState("");
 
 	const { token, user, setToken, setUser } = useUser();
+
+	const navigate = useNavigate();
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -201,7 +204,12 @@ export default function ProfilePage() {
 					</div>
 				</CardContent>
 				<CardFooter className="flex justify-between">
-					<Button variant="outline">编辑资料</Button>
+					<Button
+						variant="outline"
+						onClick={() => navigate("/edit", { replace: true })}
+					>
+						编辑资料
+					</Button>
 					<Button variant="outline" onClick={() => setToken("")}>
 						退出登录
 					</Button>
