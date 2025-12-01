@@ -19,16 +19,17 @@ func Auth(r *ghttp.Request) {
 		r.Response.WriteJsonExit(rtool.ToReturn(http.StatusUnauthorized, "认证信息无效", -1))
 	}
 
-	data, err := jwt.ParseWithClaims(token, consts.ClaimsStruct{}, func(token *jwt.Token) (any, error) {
+	data, err := jwt.ParseWithClaims(token, &consts.ClaimsStruct{}, func(token *jwt.Token) (any, error) {
 		jwtSecret, _ := g.Cfg().Get(r.GetCtx(), "jwt.secret")
-		return jwtSecret, nil
+		return jwtSecret.Bytes(), nil
 	})
+
 	if err != nil {
 		r.Response.Status = http.StatusUnauthorized
-		r.Response.WriteJsonExit(rtool.ToReturn(http.StatusUnauthorized, "认证信息无效", -1))
+		r.Response.WriteJsonExit(rtool.ToReturn(http.StatusUnauthorized, "认证信息无效", err.Error()))
 	}
 
 	// 将用户信息存入 Context，后续接口可以获取
-	r.SetCtxVar("userInfo", gconv.Map(data))
+	r.SetCtxVar("userinfo", gconv.Map(data))
 	r.Middleware.Next()
 }
