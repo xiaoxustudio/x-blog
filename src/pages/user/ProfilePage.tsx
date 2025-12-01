@@ -158,7 +158,10 @@ export default function ProfilePage() {
 	const formattedDate = new Date(user.createdAt).toLocaleDateString("zh-CN", {
 		year: "numeric",
 		month: "long",
-		day: "numeric"
+		day: "numeric",
+		hour: "numeric",
+		minute: "numeric",
+		second: "numeric"
 	});
 
 	return (
