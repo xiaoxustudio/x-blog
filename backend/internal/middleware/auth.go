@@ -16,7 +16,7 @@ func Auth(r *ghttp.Request) {
 	token := r.Header.Get("Authorization")
 	if token == "" {
 		r.Response.Status = http.StatusUnauthorized
-		r.Response.WriteJsonExit(rtool.ToReturn(http.StatusUnauthorized, "认证信息无效", -1))
+		r.Response.WriteJsonExit(rtool.ToReturn(-1, "认证信息无效", http.StatusUnauthorized))
 	}
 
 	data, err := jwt.ParseWithClaims(token, &consts.ClaimsStruct{}, func(token *jwt.Token) (any, error) {
@@ -26,7 +26,7 @@ func Auth(r *ghttp.Request) {
 
 	if err != nil {
 		r.Response.Status = http.StatusUnauthorized
-		r.Response.WriteJsonExit(rtool.ToReturn(http.StatusUnauthorized, "认证信息无效", err.Error()))
+		r.Response.WriteJsonExit(rtool.ToReturn(-1, "认证信息无效", err.Error()))
 	}
 
 	// 将用户信息存入 Context，后续接口可以获取
