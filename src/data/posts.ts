@@ -1,20 +1,4 @@
-export interface Post {
-	id: number;
-	title: string;
-	excerpt: string;
-	content: string;
-	author: string;
-	date: string;
-	coverImage: string;
-	tags: string[];
-	featured: boolean;
-}
-
-export interface TagMetadata {
-	name: string;
-	description: string;
-	color: string;
-}
+import type { Post, TagMetadata } from "@/types";
 
 export const tagsData: TagMetadata[] = [
 	{

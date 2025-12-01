@@ -13,6 +13,7 @@ import {
 import useUser from "@/store/useUser";
 import Login from "@/apis/user/login";
 import GetInfo from "@/apis/user/info";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function ProfilePage() {
 	const [pageMode, setPageMode] = useState<"login" | "register">("login");
@@ -22,7 +23,7 @@ export default function ProfilePage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
-	const { token, setToken } = useUser();
+	const { token, user, setToken, setUser } = useUser();
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -47,17 +48,20 @@ export default function ProfilePage() {
 
 	useEffect(() => {
 		if (token) {
-			GetInfo().then((res) => console.log("徐然", res));
+			GetInfo().then(({ data }) => {
+				if (~data.code) {
+					setUser(data.data);
+				} else {
+					// token过期，清除token
+					setToken("");
+				}
+			});
 		}
 	}, []); // eslint-disable-line
 
-	return (
-		<div className="flex items-center justify-center min-h-screen bg-background">
-			{token ? (
-				<>
-					主页<Button onClick={() => setToken("")}>退出登录</Button>
-				</>
-			) : (
+	if (!token || !user) {
+		return (
+			<div className="flex items-center justify-center min-h-screen bg-background">
 				<Card className="w-full max-w-md">
 					<CardHeader>
 						<CardTitle>{isLoginMode ? "登录" : "注册"}</CardTitle>
@@ -141,7 +145,63 @@ export default function ProfilePage() {
 						</CardFooter>
 					</form>
 				</Card>
-			)}
+			</div>
+		);
+	}
+
+	const avatarFallback = user.nickname
+		? user.nickname.charAt(0).toUpperCase()
+		: user.username.charAt(0).toUpperCase();
+
+	const formattedDate = new Date(user.createdAt).toLocaleDateString("zh-CN", {
+		year: "numeric",
+		month: "long",
+		day: "numeric"
+	});
+
+	return (
+		<div className="flex items-center justify-center min-h-screen bg-background">
+			<Card className="w-full max-w-md">
+				<CardHeader className="flex flex-row items-center space-y-0 pb-4">
+					<Avatar className="h-16 w-16">
+						<AvatarImage
+							src={user.avatar}
+							alt={user.nickname || user.username}
+						/>
+						<AvatarFallback className="text-lg">
+							{avatarFallback}
+						</AvatarFallback>
+					</Avatar>
+					<div className="ml-4 space-y-1">
+						<CardTitle className="text-2xl">
+							{user.nickname || user.username}
+						</CardTitle>
+						<CardDescription>@{user.username}</CardDescription>
+					</div>
+				</CardHeader>
+				<CardContent className="space-y-4">
+					<div className="flex items-center space-x-2 rounded-md p-2">
+						<Label className="text-sm font-medium w-20">邮箱</Label>
+						<p className="text-sm text-muted-foreground flex-1">
+							{user!.email}
+						</p>
+					</div>
+					<div className="flex items-center space-x-2 rounded-md p-2">
+						<Label className="text-sm font-medium w-20">
+							注册时间
+						</Label>
+						<p className="text-sm text-muted-foreground flex-1">
+							{formattedDate}
+						</p>
+					</div>
+				</CardContent>
+				<CardFooter className="flex justify-between">
+					<Button variant="outline">编辑资料</Button>
+					<Button variant="outline" onClick={() => setToken("")}>
+						退出登录
+					</Button>
+				</CardFooter>
+			</Card>
 		</div>
 	);
 }
