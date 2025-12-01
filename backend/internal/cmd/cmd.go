@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"backend/internal/controller/user"
+	"backend/internal/middleware"
 	"context"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -38,12 +39,12 @@ var (
 					group.POST("/login", controller.Login)
 				})
 
-				// // 需要认证的路由
-				// group.Group("/user", func(group *ghttp.RouterGroup) {
-				// 	group.Middleware(middleware.Auth) // 应用认证中间件
-				// 	controller := user.New()
-				// 	group.Bind(controller.Info)
-				// })
+				// 需要认证的路由
+				group.Group("/user", func(group *ghttp.RouterGroup) {
+					group.Middleware(middleware.Auth) // 应用认证中间件
+					controller := user.New()
+					group.GET("/info", controller.Info)
+				})
 			})
 			s.Run()
 			return nil

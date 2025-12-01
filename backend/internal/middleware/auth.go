@@ -30,6 +30,6 @@ func Auth(r *ghttp.Request) {
 	}
 
 	// 将用户信息存入 Context，后续接口可以获取
-	r.SetCtxVar("userinfo", gconv.Map(data))
+	r.SetCtxVar("userinfo", gconv.Map(data.Claims))
 	r.Middleware.Next()
 }

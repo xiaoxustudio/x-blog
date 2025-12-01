@@ -19,11 +19,4 @@ type (
 	LoginRes struct {
 		Token string `json:"token"`
 	}
-
-	InfoReq struct {
-		g.Meta `path:"/user/info" method:"GET" summary:"获取用户信息"`
-	}
-	InfoRes struct {
-		Username string `json:"username"`
-	}
 )

@@ -107,3 +107,29 @@ func (u *User) Register(req *ghttp.Request) {
 
 	req.Response.WriteJsonExit(rtool.ToReturn(0, "注册成功", nil))
 }
+
+func (u *User) Info(req *ghttp.Request) {
+
+	info := req.Context().Value("userinfo").(map[string]interface{})
+	username := info["username"].(string)
+
+	md := dao.Users.Ctx(req.Context())
+	var user entity.Users
+	err := md.Where("username = ?", username).With(entity.Users{}).Scan(&user)
+	if err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "用户不存在", err.Error()))
+	}
+	if user.Id == 0 {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "用户不存在", nil))
+	}
+
+	userinfo := g.Map{
+		"id":        user.Id,
+		"username":  user.Username,
+		"email":     user.Email,
+		"nickname":  user.Nickname,
+		"avatar":    user.Avatar,
+		"createdAt": user.CreatedAt,
+	}
+	req.Response.WriteJsonExit(rtool.ToReturn(0, "获取用户信息成功", userinfo))
+}

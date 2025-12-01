@@ -8,3 +8,10 @@ export interface IUser {
 	createdAt: Date;
 	updatedAt: Date;
 }
+
+export interface RepsonseData {
+	code: number;
+	msg: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	data: any;
+}
