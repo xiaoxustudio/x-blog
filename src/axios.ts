@@ -1,6 +1,7 @@
 import axios, { type AxiosRequestConfig } from "axios";
 import type { RepsonseData } from "./types";
 import useUser from "./store/useUser";
+import { toast } from "sonner";
 
 const ApiInstance = axios.create({
 	timeout: 1000
@@ -26,7 +27,17 @@ export function Get<T = RepsonseData, D = any>(
 	url: string,
 	config?: AxiosRequestConfig
 ) {
-	return ApiInstance.get<D, T>(url, config);
+	return ApiInstance.get<D, T>(url, config).catch((error) => {
+		const {
+			response: { data },
+			status
+		} = error;
+		if (status === 401) {
+			useUser.getState().setToken("");
+			toast.error(data.msg);
+		}
+		return error;
+	});
 }
 
 export default ApiInstance;

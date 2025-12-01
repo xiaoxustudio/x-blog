@@ -14,6 +14,7 @@ import useUser from "@/store/useUser";
 import Login from "@/apis/user/login";
 import GetInfo from "@/apis/user/info";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { toast } from "sonner";
 
 export default function ProfilePage() {
 	const [pageMode, setPageMode] = useState<"login" | "register">("login");
@@ -34,8 +35,9 @@ export default function ProfilePage() {
 				.then(({ data }) => {
 					if (~data.code) {
 						setToken(data.data);
+						toast.success(data.msg);
 					} else {
-						console.log(data.msg);
+						toast.error(data.msg);
 					}
 				})
 				.finally(() => {
@@ -52,8 +54,8 @@ export default function ProfilePage() {
 				if (~data.code) {
 					setUser(data.data);
 				} else {
-					// token过期，清除token
 					setToken("");
+					toast.error(data.msg);
 				}
 			});
 		}
