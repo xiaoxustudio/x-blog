@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import useUser from "@/store/useUser";
 import GetInfo from "@/apis/user/info";
 import { useNavigate } from "react-router-dom";
+import UpdateEdit from "@/apis/user/edit";
 
 interface UserProfile {
 	id: number;
@@ -70,19 +71,19 @@ export default function ProfileEditPage() {
 		}
 	};
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		setIsLoading(true);
 
-		try {
-			await new Promise((resolve) => setTimeout(resolve, 1500));
-			console.log(profile);
-			toast.success("保存成功");
-		} catch {
-			toast.error("保存失败");
-		} finally {
-			setIsLoading(false);
-		}
+		UpdateEdit(profile)
+			.then(({ data }) => {
+				if (~data.code) {
+					toast.error(data.msg);
+				} else {
+					toast.success(data.msg);
+				}
+			})
+			.finally(() => setIsLoading(false));
 	};
 
 	const handleBack = () => {
@@ -95,6 +96,7 @@ export default function ProfileEditPage() {
 				if (~data.code) {
 					setUser(data.data);
 					setProfile(data.data);
+					setAvatarPreview(data.data.avatar);
 				} else {
 					setToken("");
 					toast.error(data.msg);
@@ -175,6 +177,7 @@ export default function ProfileEditPage() {
 										}
 										placeholder="请输入用户名"
 										required
+										disabled
 									/>
 								</div>
 

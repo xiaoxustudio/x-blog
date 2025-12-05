@@ -33,6 +33,8 @@ var (
 			s.Group("/", func(group *ghttp.RouterGroup) {
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Middleware(Middleware)
+
+				// 不需要认证的路由
 				group.Group("/user", func(group *ghttp.RouterGroup) {
 					controller := user.New()
 					group.POST("/register", controller.Register)
@@ -44,6 +46,7 @@ var (
 					group.Middleware(middleware.Auth) // 应用认证中间件
 					controller := user.New()
 					group.GET("/info", controller.Info)
+					group.POST("/edit", controller.EditInfo)
 				})
 			})
 			s.Run()

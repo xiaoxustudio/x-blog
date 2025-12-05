@@ -110,7 +110,7 @@ func (u *User) Register(req *ghttp.Request) {
 
 func (u *User) Info(req *ghttp.Request) {
 
-	info := req.Context().Value("userinfo").(map[string]interface{})
+	info := req.Context().Value("userinfo").(map[string]any)
 	username := info["username"].(string)
 
 	md := dao.Users.Ctx(req.Context())
@@ -132,4 +132,38 @@ func (u *User) Info(req *ghttp.Request) {
 		"createdAt": user.CreatedAt,
 	}
 	req.Response.WriteJsonExit(rtool.ToReturn(0, "获取用户信息成功", userinfo))
+}
+
+func (u *User) EditInfo(req *ghttp.Request) {
+	ctx := req.Context()
+
+	var data v1.EditInfoReq
+	if err := req.Parse(&data); err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "请求体格式错误", err.Error()))
+		return
+	}
+	if err := g.Validator().Data(&data).Run(ctx); err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "参数校验失败", err.Maps()))
+		return
+	}
+
+	info := req.Context().Value("userinfo").(map[string]any)
+	username := info["username"].(string)
+
+	md := dao.Users.Ctx(req.Context())
+	_, err := md.Clone().Where("username = ?", username).Update(g.Map{
+		"nickname": data.Nickname,
+		"email":    data.Email,
+		"avatar":   data.Avatar,
+	})
+	if err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "修改用户信息失败", err.Error()))
+	}
+
+	var user entity.Users
+	err = md.Clone().Where("username = ?", username).With(entity.Users{}).Scan(&user)
+	if err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "获取用户信息失败", err.Error()))
+	}
+	req.Response.WriteJsonExit(rtool.ToReturn(0, "修改用户信息成功", user))
 }

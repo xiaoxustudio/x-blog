@@ -19,4 +19,13 @@ type (
 	LoginRes struct {
 		Token string `json:"token"`
 	}
+
+	EditInfoReq struct {
+		g.Meta   `path:"/user/editInfo" method:"POST" summary:"编辑用户信息"`
+		Nickname string `json:"nickname" v:"required|length:3,50#昵称不能为空|昵称长度为3到50位"`
+		Email    string `json:"email" v:"required|email#邮箱不能为空|邮箱格式不正确"`
+		Avatar   string `json:"avatar"`
+	}
+	EditInfoRes struct {
+	}
 )
