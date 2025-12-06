@@ -1,0 +1,330 @@
+/* CSS 变量定义 - 便于主题切换和自定义 */
+:root {
+	--ProseMirror-max-width: 800px;
+	--ProseMirror-color: #333;
+	--ProseMirror-bg-color: #fff;
+	--ProseMirror-border-color: #eaecef;
+	--ProseMirror-accent-color: #0366d6;
+	--ProseMirror-accent-hover: #0256cc;
+	--ProseMirror-code-bg: #f6f8fa;
+	--ProseMirror-quote-color: #6a737d;
+	--ProseMirror-quote-border: #dfe2e5;
+	--ProseMirror-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 暗色模式支持 */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--ProseMirror-color: #e1e4e8;
+		--ProseMirror-bg-color: #0d1117;
+		--ProseMirror-border-color: #30363d;
+		--ProseMirror-accent-color: #58a6ff;
+		--ProseMirror-accent-hover: #79c0ff;
+		--ProseMirror-code-bg: #161b22;
+		--ProseMirror-quote-color: #8b949e;
+		--ProseMirror-quote-border: #30363d;
+		--ProseMirror-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+	}
+}
+
+/* 容器样式 */
+.ProseMirror {
+	outline: none;
+	max-width: var(--ProseMirror-max-width);
+	margin: 0 auto;
+	padding: 24px;
+	font-family:
+		system-ui,
+		-apple-system,
+		BlinkMacSystemFont,
+		"Segoe UI",
+		Roboto,
+		"Helvetica Neue",
+		Arial,
+		"Noto Sans",
+		sans-serif,
+		"Apple Color Emoji",
+		"Segoe UI Emoji",
+		"Segoe UI Symbol",
+		"Noto Color Emoji";
+	line-height: 1.7;
+	color: var(--ProseMirror-color);
+	background-color: var(--ProseMirror-bg-color);
+	border-radius: 8px;
+	box-shadow: var(--ProseMirror-shadow);
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+	.ProseMirror {
+		padding: 16px;
+		margin: 0 8px;
+	}
+}
+
+/* 标题样式 */
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3,
+.ProseMirror h4,
+.ProseMirror h5,
+.ProseMirror h6 {
+	margin-top: 32px;
+	margin-bottom: 16px;
+	font-weight: 600;
+	line-height: 1.25;
+	scroll-margin-top: 20px;
+}
+
+.ProseMirror h1:first-child,
+.ProseMirror h2:first-child,
+.ProseMirror h3:first-child,
+.ProseMirror h4:first-child,
+.ProseMirror h5:first-child,
+.ProseMirror h6:first-child {
+	margin-top: 0;
+}
+
+.ProseMirror h1 {
+	font-size: 2.25em;
+	border-bottom: 1px solid var(--ProseMirror-border-color);
+	padding-bottom: 0.5em;
+}
+
+.ProseMirror h2 {
+	font-size: 1.875em;
+	border-bottom: 1px solid var(--ProseMirror-border-color);
+	padding-bottom: 0.4em;
+}
+
+.ProseMirror h3 {
+	font-size: 1.5em;
+}
+
+.ProseMirror h4 {
+	font-size: 1.25em;
+}
+
+.ProseMirror h5 {
+	font-size: 1.125em;
+}
+
+.ProseMirror h6 {
+	font-size: 1em;
+	color: var(--ProseMirror-quote-color);
+}
+
+/* 链接样式 */
+.ProseMirror a {
+	color: var(--ProseMirror-accent-color);
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.ProseMirror a:hover {
+	color: var(--ProseMirror-accent-hover);
+	text-decoration: underline;
+}
+
+.ProseMirror a:focus {
+	outline: 2px solid var(--ProseMirror-accent-color);
+	outline-offset: 2px;
+	border-radius: 2px;
+}
+
+/* 列表样式 */
+.ProseMirror ul,
+.ProseMirror ol {
+	padding-left: 2em;
+	margin-bottom: 16px;
+}
+.ProseMirror ul {
+	list-style: initial;
+}
+.ProseMirror ol {
+	list-style: auto;
+}
+
+.ProseMirror li {
+	margin-bottom: 0.5em;
+}
+
+.ProseMirror li:last-child {
+	margin-bottom: 0;
+}
+
+.ProseMirror ul > li::marker {
+	color: var(--ProseMirror-quote-color);
+}
+
+.ProseMirror ol > li::marker {
+	color: var(--ProseMirror-quote-color);
+	font-weight: 600;
+}
+
+/* 引用块样式 */
+.ProseMirror blockquote {
+	padding: 0 1em;
+	margin: 24px 0;
+	color: var(--ProseMirror-quote-color);
+	border-left: 4px solid var(--ProseMirror-quote-border);
+	font-style: italic;
+}
+
+.ProseMirror blockquote p {
+	margin-bottom: 0;
+}
+
+/* 代码样式 */
+.ProseMirror code {
+	padding: 0.2em 0.4em;
+	margin: 0 2px;
+	font-size: 0.875em;
+	font-family:
+		ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono",
+		Menlo, monospace;
+	background-color: var(--ProseMirror-code-bg);
+	border-radius: 4px;
+	word-wrap: break-word;
+}
+
+.ProseMirror pre {
+	padding: 16px;
+	margin: 24px 0;
+	overflow: auto;
+	font-size: 0.875em;
+	line-height: 1.5;
+	font-family:
+		ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono",
+		Menlo, monospace;
+	background-color: var(--ProseMirror-code-bg);
+	border-radius: 6px;
+	border: 1px solid var(--ProseMirror-border-color);
+}
+
+.ProseMirror pre code {
+	display: block;
+	padding: 0;
+	margin: 0;
+	background-color: transparent;
+	border: none;
+	font-size: inherit;
+}
+
+/* 表格样式 */
+.ProseMirror table {
+	width: 100%;
+	margin: 24px 0;
+	border-collapse: collapse;
+	font-size: 0.875em;
+}
+
+.ProseMirror table th,
+.ProseMirror table td {
+	padding: 8px 12px;
+	border: 1px solid var(--ProseMirror-border-color);
+	text-align: left;
+}
+
+.ProseMirror table th {
+	background-color: var(--ProseMirror-code-bg);
+	font-weight: 600;
+}
+
+.ProseMirror table tr:nth-child(even) {
+	background-color: var(--ProseMirror-code-bg);
+}
+
+/* 图片样式 */
+.ProseMirror img {
+	max-width: 100%;
+	height: auto;
+	margin: 24px 0;
+	border-radius: 6px;
+	box-shadow: var(--ProseMirror-shadow);
+}
+
+/* 分隔线样式 */
+.ProseMirror hr {
+	height: 1px;
+	margin: 32px 0;
+	border: none;
+	background-color: var(--ProseMirror-border-color);
+}
+
+/* 强调文本 */
+.ProseMirror strong {
+	font-weight: 600;
+}
+
+.ProseMirror em {
+	font-style: italic;
+}
+
+/* 删除线 */
+.ProseMirror del {
+	text-decoration: line-through;
+	color: var(--ProseMirror-quote-color);
+}
+
+/* 下标和上标 */
+.ProseMirror sub,
+.ProseMirror sup {
+	font-size: 0.75em;
+	line-height: 0;
+	position: relative;
+	vertical-align: baseline;
+}
+
+.ProseMirror sub {
+	bottom: -0.25em;
+}
+
+.ProseMirror sup {
+	top: -0.5em;
+}
+
+/* 键盘按键样式 */
+.ProseMirror kbd {
+	padding: 0.2em 0.4em;
+	margin: 0 2px;
+	font-size: 0.875em;
+	font-family:
+		ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono",
+		Menlo, monospace;
+	background-color: var(--ProseMirror-code-bg);
+	border: 1px solid var(--ProseMirror-border-color);
+	border-radius: 4px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* 高亮文本 */
+.ProseMirror mark {
+	padding: 0.1em 0.2em;
+	background-color: #fff3cd;
+	color: #856404;
+	border-radius: 2px;
+}
+
+/* 细节/摘要元素 */
+.ProseMirror details {
+	margin: 16px 0;
+	padding: 16px;
+	border: 1px solid var(--ProseMirror-border-color);
+	border-radius: 6px;
+	background-color: var(--ProseMirror-code-bg);
+}
+
+.ProseMirror summary {
+	font-weight: 600;
+	cursor: pointer;
+	padding: 4px;
+	margin: -4px;
+}
+
+.ProseMirror summary:hover {
+	background-color: var(--ProseMirror-border-color);
+	border-radius: 2px;
+}

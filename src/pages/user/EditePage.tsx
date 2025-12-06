@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Upload, Save, User, Mail, Calendar, Hash } from "lucide-react";
 import { toast } from "sonner";
-import useUser from "@/store/useUser";
+import useUser from "@/store/user";
 import GetInfo from "@/apis/user/info";
 import { useNavigate } from "react-router-dom";
 import UpdateEdit from "@/apis/user/edit";

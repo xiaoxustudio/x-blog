@@ -13,6 +13,7 @@ import (
 	"github.com/gogf/gf/v2/crypto/gmd5"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
+	"github.com/gogf/gf/v2/os/gtime"
 )
 
 type User struct {
@@ -166,4 +167,42 @@ func (u *User) EditInfo(req *ghttp.Request) {
 		req.Response.WriteJsonExit(rtool.ToReturn(-1, "获取用户信息失败", err.Error()))
 	}
 	req.Response.WriteJsonExit(rtool.ToReturn(0, "修改用户信息成功", user))
+}
+
+func (u *User) PublishArticle(req *ghttp.Request) {
+	ctx := req.Context()
+
+	var data v1.PublishArticleReq
+	if err := req.Parse(&data); err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "请求体格式错误", err.Error()))
+		return
+	}
+	if err := g.Validator().Data(&data).Run(ctx); err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "参数校验失败", err.Maps()))
+		return
+	}
+	info := req.Context().Value("userinfo").(map[string]any)
+	username := info["username"].(string)
+	featured := 0
+
+	if data.Featured {
+		featured = 1
+	}
+	article := entity.Posts{
+		Title:      data.Title,
+		Content:    data.Content,
+		Excerpt:    data.Excerpt,
+		Author:     username,
+		Date:       gtime.NewFromTime(time.Now()),
+		CoverImage: data.CoverImage,
+		Tags:       data.Tags,
+		Featured:   featured,
+	}
+
+	_, err := dao.Posts.Ctx(ctx).Insert(article)
+	if err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "发布文章失败", err.Error()))
+	}
+
+	req.Response.WriteJsonExit(rtool.ToReturn(0, "发布文章成功", nil))
 }

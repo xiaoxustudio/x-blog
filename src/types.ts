@@ -1,13 +1,13 @@
 export interface Post {
 	id: number;
-	title: string;
-	excerpt: string;
-	content: string;
-	author: string;
-	date: string;
-	coverImage: string;
-	tags: string[];
-	featured: boolean;
+	title: string; // 标题
+	excerpt: string; // 摘要
+	content: string; // markdown
+	author: string; // 作者ID
+	date: string; // 发布时间
+	coverImage: string; // base64 图片文本
+	tags: string[]; // 标签
+	featured: boolean; // 是否为推荐文章
 }
 
 export interface TagMetadata {

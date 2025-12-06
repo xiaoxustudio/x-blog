@@ -1,9 +1,12 @@
+import { Toaster } from "sonner";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { FeaturedPost } from "./components/FeaturedPost";
 import { PostCard } from "./components/PostCard";
 import { Footer } from "./components/Footer";
+
 import { postsData } from "./data/posts";
 
 import ArticlesPage from "./pages/ArticlesPage";
@@ -11,7 +14,7 @@ import CategoriesPage from "./pages/CategoriesPage";
 import ArticleDetailPage from "./pages/ArticleDetailPage";
 import ProfilePage from "./pages/user/ProfilePage";
 import ProfileEditPage from "./pages/user/EditePage";
-import { Toaster } from "sonner";
+import ArticlePublishPage from "./pages/Publish";
 
 const featuredPosts = postsData.filter((post) => post.featured);
 const regularPosts = postsData.filter((post) => !post.featured);
@@ -66,6 +69,10 @@ function App() {
 						/>
 
 						<Route path="/articles" element={<ArticlesPage />} />
+						<Route
+							path="/publish"
+							element={<ArticlePublishPage />}
+						/>
 
 						<Route
 							path="/categories"

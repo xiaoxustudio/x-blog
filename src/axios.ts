@@ -1,6 +1,6 @@
 import axios, { type AxiosRequestConfig } from "axios";
 import type { RepsonseData } from "./types";
-import useUser from "./store/useUser";
+import useUser from "./store/user";
 import { toast } from "sonner";
 
 const ApiInstance = axios.create({

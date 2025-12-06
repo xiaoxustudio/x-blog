@@ -11,9 +11,11 @@ import {
 	X
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import useUser from "@/store/user";
 
 export function Header() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const { token } = useUser();
 
 	return (
 		<header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
@@ -64,7 +66,6 @@ export function Header() {
 					</div>
 				</div>
 
-				{/* Mobile Menu Button */}
 				<Button
 					variant="ghost"
 					size="icon"
@@ -77,6 +78,15 @@ export function Header() {
 						<Menu className="h-5 w-5" />
 					)}
 				</Button>
+
+				{token && (
+					<Link
+						to="/publish"
+						className="flex items-center text-sm font-medium hover:text-primary transition-colors"
+					>
+						发布文章
+					</Link>
+				)}
 			</div>
 
 			{/* Mobile Navigation */}

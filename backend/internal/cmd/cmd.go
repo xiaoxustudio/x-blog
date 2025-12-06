@@ -43,10 +43,11 @@ var (
 
 				// 需要认证的路由
 				group.Group("/user", func(group *ghttp.RouterGroup) {
-					group.Middleware(middleware.Auth) // 应用认证中间件
+					group.Middleware(middleware.Auth)
 					controller := user.New()
 					group.GET("/info", controller.Info)
 					group.POST("/edit", controller.EditInfo)
+					group.POST("/publish", controller.PublishArticle)
 				})
 			})
 			s.Run()

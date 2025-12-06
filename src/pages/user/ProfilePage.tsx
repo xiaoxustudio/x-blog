@@ -10,7 +10,7 @@ import {
 	CardHeader,
 	CardTitle
 } from "@/components/ui/card";
-import useUser from "@/store/useUser";
+import useUser from "@/store/user";
 import Login from "@/apis/user/login";
 import GetInfo from "@/apis/user/info";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

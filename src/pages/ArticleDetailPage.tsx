@@ -1,10 +1,9 @@
 import { useParams, Link } from "react-router-dom";
-import ReactMarkdown from "react-markdown";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import { postsData } from "@/data/posts";
-import "./ArticleDetailPage.css";
+import Editor from "@/components/Editor";
 
 function ArticleDetailPage() {
 	const { id } = useParams<{ id: string }>();
@@ -61,7 +60,7 @@ function ArticleDetailPage() {
 				/>
 
 				<div className="prose prose-lg max-w-none">
-					<ReactMarkdown>{post.content}</ReactMarkdown>
+					<Editor value={post.content} readonly={true}></Editor>
 				</div>
 			</article>
 		</div>

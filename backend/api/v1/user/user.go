@@ -28,4 +28,18 @@ type (
 	}
 	EditInfoRes struct {
 	}
+
+	PublishArticleReq struct {
+		g.Meta     `path:"/user/publishArticle" method:"POST" summary:"发布文章"`
+		Title      string `json:"title" v:"required|length:3,50#标题不能为空|标题长度为3到50位"`
+		Content    string `json:"content" v:"required#内容不能为空"`
+		Excerpt    string `json:"excerpt" v:"required|length:3,50#摘要不能为空|摘要长度为3到50位"`
+		Author     string `json:"author" v:"required|length:3,50#作者不能为空|作者长度为3到50位"`
+		Date       string `json:"date" v:"required#日期不能为空"`
+		CoverImage string `json:"coverImage" v:"required#封面不能为空"`
+		Tags       string `json:"tags" v:"required#标签不能为空"`
+		Featured   bool   `json:"featured" v:"required#特性不能为空"`
+	}
+	PublishArticleRes struct {
+	}
 )
