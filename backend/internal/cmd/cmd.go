@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"backend/internal/controller/common"
 	"backend/internal/controller/user"
 	"backend/internal/middleware"
 	"context"
@@ -33,6 +34,11 @@ var (
 			s.Group("/", func(group *ghttp.RouterGroup) {
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Middleware(Middleware)
+
+				group.Group("/common", func(group *ghttp.RouterGroup) {
+					controller := common.New()
+					group.GET("/tags", controller.GetTags)
+				})
 
 				// 不需要认证的路由
 				group.Group("/user", func(group *ghttp.RouterGroup) {
