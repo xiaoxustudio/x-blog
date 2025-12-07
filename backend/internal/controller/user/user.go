@@ -210,7 +210,7 @@ func (u *User) PublishArticle(req *ghttp.Request) {
 	})
 
 	if err != nil {
-		req.Response.WriteJsonExit(rtool.ToReturn(-1, "标签创建识别/创建错误", err.Error()))
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "标签不存在", err.Error()))
 	}
 
 	article := entity.Posts{

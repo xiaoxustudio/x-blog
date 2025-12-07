@@ -35,11 +35,6 @@ var (
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Middleware(Middleware)
 
-				group.Group("/common", func(group *ghttp.RouterGroup) {
-					controller := common.New()
-					group.GET("/tags", controller.GetTags)
-				})
-
 				// 不需要认证的路由
 				group.Group("/user", func(group *ghttp.RouterGroup) {
 					controller := user.New()
@@ -47,7 +42,19 @@ var (
 					group.POST("/login", controller.Login)
 				})
 
+				group.Group("/common", func(group *ghttp.RouterGroup) {
+					controller := common.New()
+					group.GET("/tags", controller.GetTags)
+				})
+
 				// 需要认证的路由
+
+				group.Group("/common", func(group *ghttp.RouterGroup) {
+					group.Middleware(middleware.Auth)
+					controller := common.New()
+					group.POST("/posts", controller.GetPosts)
+				})
+
 				group.Group("/user", func(group *ghttp.RouterGroup) {
 					group.Middleware(middleware.Auth)
 					controller := user.New()

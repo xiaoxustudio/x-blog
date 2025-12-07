@@ -25,3 +25,14 @@ func (u *Common) GetTags(req *ghttp.Request) {
 
 	req.Response.WriteJsonExit(rtool.ToReturn(0, "ok", data))
 }
+
+func (u *Common) GetPosts(req *ghttp.Request) {
+	ctx := req.Context()
+	var data []entity.Posts
+	err := dao.Posts.Ctx(ctx).With(entity.Posts{}).Scan(&data)
+	if err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "获取文章失败", err.Error()))
+	}
+
+	req.Response.WriteJsonExit(rtool.ToReturn(0, "ok", data))
+}
