@@ -7,52 +7,52 @@ export function Header() {
 	const { token } = useUser();
 
 	return (
-		<header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+		<header className="bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full backdrop-blur">
 			<div className="container flex h-16 items-center justify-between">
 				{/* Logo */}
-				<Link to="/" className="text-2xl font-bold pl-35">
+				<Link to="/" className="pl-35 text-2xl font-bold">
 					X Blog
 				</Link>
 
 				{/* Desktop Navigation */}
-				<nav className="hidden md:flex items-center space-x-6">
+				<nav className="hidden items-center space-x-6 md:flex">
 					<Link
 						to="/"
-						className="text-sm font-medium hover:text-primary transition-colors"
+						className="hover:text-primary text-sm font-medium transition-colors"
 					>
-						<Home className="mr-1 h-4 w-4 inline" />
+						<Home className="mr-1 inline h-4 w-4" />
 						首页
 					</Link>
 					<Link
 						to="/categories"
-						className="text-sm font-medium hover:text-primary transition-colors"
+						className="hover:text-primary text-sm font-medium transition-colors"
 					>
-						<FolderOpen className="mr-1 h-4 w-4 inline" />
+						<FolderOpen className="mr-1 inline h-4 w-4" />
 						分类
 					</Link>
 					<Link
 						to="/articles"
-						className="flex items-center text-sm font-medium hover:text-primary transition-colors"
+						className="hover:text-primary flex items-center text-sm font-medium transition-colors"
 					>
-						<BookOpen className="mr-1 h-4 w-4 inline" /> 文章
+						<BookOpen className="mr-1 inline h-4 w-4" /> 文章
 					</Link>
 					<Link
 						to="/profile"
-						className="flex items-center text-sm font-medium hover:text-primary transition-colors"
+						className="hover:text-primary flex items-center text-sm font-medium transition-colors"
 					>
-						<User className="mr-1 h-4 w-4 inline" /> 我的
+						<User className="mr-1 inline h-4 w-4" /> 我的
 					</Link>
 				</nav>
 
 				{/* Search Bar */}
-				<div className="hidden md:flex items-center space-x-2">
+				<div className="hidden items-center space-x-2 md:flex">
 					<div className="relative">
 						<TextField.Root
 							placeholder="搜索文章..."
-							className="pl-8 w-64"
+							className="w-64 pl-8"
 						>
 							<TextField.Slot>
-								<Search className=" h-4 w-4 text-muted-foreground" />
+								<Search className="text-muted-foreground h-4 w-4" />
 							</TextField.Slot>
 						</TextField.Root>
 					</div>
@@ -61,7 +61,7 @@ export function Header() {
 				{token && (
 					<Link
 						to="/publish"
-						className="flex items-center text-sm font-medium hover:text-primary transition-colors"
+						className="hover:text-primary flex items-center text-sm font-medium transition-colors"
 					>
 						发布文章
 					</Link>

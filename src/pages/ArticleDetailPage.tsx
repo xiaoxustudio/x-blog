@@ -13,7 +13,7 @@ function ArticleDetailPage() {
 	if (!post) {
 		return (
 			<div className="container mx-auto px-4 py-12 text-center">
-				<h1 className="text-4xl font-bold mb-4">404 - 文章未找到</h1>
+				<h1 className="mb-4 text-4xl font-bold">404 - 文章未找到</h1>
 				<p className="text-muted-foreground mb-8">
 					抱歉，您访问的文章不存在。
 				</p>
@@ -25,8 +25,8 @@ function ArticleDetailPage() {
 	}
 
 	return (
-		<div className="container mx-auto px-4 py-12 max-w-4xl">
-			<Link to="/articles" className="block -ml-40 sticky top-25 z-50">
+		<div className="container mx-auto max-w-4xl px-4 py-12">
+			<Link to="/articles" className="sticky top-25 z-50 -ml-40 block">
 				<Button mode="clear" className="mb-6">
 					<ArrowLeft className="mr-2 h-4 w-4" />
 					返回文章列表
@@ -35,16 +35,16 @@ function ArticleDetailPage() {
 
 			<article>
 				<header className="mb-8">
-					<h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+					<h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">
 						{post.title}
 					</h1>
-					<div className="flex items-center text-sm text-muted-foreground mb-4">
+					<div className="text-muted-foreground mb-4 flex items-center text-sm">
 						<User className="mr-1 h-4 w-4" />
 						<span className="mr-4">{post.author}</span>
 						<Calendar className="mr-1 h-4 w-4" />
 						<span>{post.date}</span>
 					</div>
-					<div className="flex gap-2 flex-wrap">
+					<div className="flex flex-wrap gap-2">
 						{post.tags.map((tag) => (
 							<Badge key={tag} color="gray">
 								{tag}
@@ -56,7 +56,7 @@ function ArticleDetailPage() {
 				<img
 					src={post.coverImage}
 					alt={post.title}
-					className="w-full h-64 md:h-96 object-cover rounded-lg mb-8"
+					className="mb-8 h-64 w-full rounded-lg object-cover md:h-96"
 				/>
 
 				<div className="prose prose-lg max-w-none">

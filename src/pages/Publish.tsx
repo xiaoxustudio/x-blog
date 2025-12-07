@@ -110,7 +110,7 @@ export default function ArticlePublishPage() {
 	};
 
 	return (
-		<div className="container mx-auto p-4 md:p-6 lg:p-8 max-w-4xl">
+		<div className="container mx-auto max-w-4xl p-4 md:p-6 lg:p-8">
 			<Card>
 				<Flex direction="column" gap="2" className="pb-4">
 					<Heading>发布新文章</Heading>
@@ -213,7 +213,7 @@ export default function ArticlePublishPage() {
 								/>
 								<label
 									htmlFor="featured"
-									className="pl-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+									className="pl-2 text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 								>
 									设为特色文章
 								</label>

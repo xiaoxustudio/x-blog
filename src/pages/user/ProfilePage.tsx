@@ -68,7 +68,7 @@ export default function ProfilePage() {
 			<Flex
 				align="center"
 				justify="center"
-				className="min-h-screen bg-background"
+				className="bg-background min-h-screen"
 			>
 				<Card className="w-full max-w-md">
 					<Flex gap="2" direction="column">
@@ -174,7 +174,7 @@ export default function ProfilePage() {
 	});
 
 	return (
-		<div className="flex items-center justify-center min-h-screen bg-background">
+		<div className="bg-background flex min-h-screen items-center justify-center">
 			<Card className="w-full max-w-md">
 				<Flex direction="row" align="center" className="space-y-0 pb-4">
 					<Avatar
@@ -192,16 +192,16 @@ export default function ProfilePage() {
 				</Flex>
 				<Box className="space-y-4">
 					<Flex align="center" className="space-x-2 rounded-md pb-2">
-						<label className="text-sm font-medium w-20">邮箱</label>
-						<p className="text-sm text-muted-foreground flex-1">
+						<label className="w-20 text-sm font-medium">邮箱</label>
+						<p className="text-muted-foreground flex-1 text-sm">
 							{user!.email}
 						</p>
 					</Flex>
 					<Flex align="center" className="space-x-2 rounded-md pb-2">
-						<label className="text-sm font-medium w-20">
+						<label className="w-20 text-sm font-medium">
 							注册时间
 						</label>
-						<p className="text-sm text-muted-foreground flex-1">
+						<p className="text-muted-foreground flex-1 text-sm">
 							{formattedDate}
 						</p>
 					</Flex>

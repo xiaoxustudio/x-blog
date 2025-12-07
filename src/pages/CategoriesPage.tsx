@@ -29,14 +29,14 @@ function CategoriesPage() {
 
 	return (
 		<div className="container mx-auto px-4 py-12">
-			<div className="text-center mb-12">
+			<div className="mb-12 text-center">
 				<h1 className="text-4xl font-bold tracking-tight">文章分类</h1>
-				<p className="mt-4 text-lg text-muted-foreground">
+				<p className="text-muted-foreground mt-4 text-lg">
 					探索不同技术领域的文章，点击分类查看相关内容。
 				</p>
 			</div>
 
-			<div className="flex flex-wrap justify-center gap-4 mb-16">
+			<div className="mb-16 flex flex-wrap justify-center gap-4">
 				{tagsData.map((tag) => {
 					const count = tagCounts[tag.name] || 0;
 					const sizeClass = getTagSize(count);
@@ -48,7 +48,7 @@ function CategoriesPage() {
 						>
 							<Badge
 								color="gray"
-								className={`${sizeClass} px-4 py-2 cursor-pointer transition-transform hover:scale-110 ${tag.color} text-white hover:opacity-90`}
+								className={`${sizeClass} cursor-pointer px-4 py-2 transition-transform hover:scale-110 ${tag.color} text-white hover:opacity-90`}
 							>
 								{tag.name} ({count})
 							</Badge>
@@ -77,7 +77,7 @@ function CategoriesPage() {
 							<Box>
 								<Link
 									to={`/articles?tag=${encodeURIComponent(tag.name)}`}
-									className="text-gray-400 text-sm text-primary hover:underline"
+									className="text-primary text-sm text-gray-400 hover:underline"
 								>
 									查看所有 "
 									<strong className="text-black/50">

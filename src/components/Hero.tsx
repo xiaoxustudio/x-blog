@@ -2,13 +2,13 @@ import { Button } from "./Button";
 
 export function Hero() {
 	return (
-		<section className="py-20 md:py-32 text-center">
+		<section className="py-20 text-center md:py-32">
 			<div className="container mx-auto px-4">
-				<h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+				<h1 className="text-4xl font-bold tracking-tight md:text-6xl">
 					欢迎来到
 					<span className="text-primary">X Blog</span>
 				</h1>
-				<p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+				<p className="text-muted-foreground mx-auto mt-4 max-w-2xl text-lg">
 					在这里，我分享关于前端开发、软件工程和个人成长的思考与见解。希望能与你一同探索技术的无限可能。
 				</p>
 				<div className="mt-8">

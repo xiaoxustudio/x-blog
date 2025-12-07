@@ -98,8 +98,8 @@ export default function ProfileEditPage() {
 	}, []); // eslint-disable-line
 
 	return (
-		<div className="min-h-screen bg-gray-50 py-8 px-4">
-			<div className="max-w-2xl mx-auto">
+		<div className="min-h-screen bg-gray-50 px-4 py-8">
+			<div className="mx-auto max-w-2xl">
 				<Card>
 					<Box>
 						<Flex align="center" gap="2">
@@ -116,7 +116,7 @@ export default function ProfileEditPage() {
 								align="center"
 								className="space-y-4"
 							>
-								<div className="relative group">
+								<div className="group relative">
 									<Avatar
 										className="h-24 w-24"
 										src={avatarPreview}
@@ -129,7 +129,7 @@ export default function ProfileEditPage() {
 								<Flex align="center" direction="column">
 									<label
 										htmlFor="avatar-upload"
-										className="cursor-pointer text-sm text-blue-600 hover:text-blue-700 flex items-center gap-2"
+										className="flex cursor-pointer items-center gap-2 text-sm text-blue-600 hover:text-blue-700"
 									>
 										<Upload className="h-4 w-4" />
 										更换头像
@@ -141,14 +141,14 @@ export default function ProfileEditPage() {
 										onChange={handleAvatarChange}
 										className="hidden"
 									/>
-									<p className="text-xs text-gray-500 mt-1">
+									<p className="mt-1 text-xs text-gray-500">
 										支持 JPG、PNG 格式，最大 5MB
 									</p>
 								</Flex>
 							</Flex>
 
 							{/* 基本信息 */}
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 								<div className="space-y-2">
 									<label
 										htmlFor="username"
@@ -219,10 +219,10 @@ export default function ProfileEditPage() {
 
 							{/* 只读信息 */}
 							<div className="border-t pt-4">
-								<h3 className="text-sm font-medium text-gray-700 mb-3">
+								<h3 className="mb-3 text-sm font-medium text-gray-700">
 									账户信息
 								</h3>
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div className="space-y-2">
 										<label
 											htmlFor="id"
@@ -276,7 +276,7 @@ export default function ProfileEditPage() {
 								>
 									{isLoading ? (
 										<div className="flex items-center gap-2">
-											<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+											<div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
 											保存中...
 										</div>
 									) : (
@@ -294,7 +294,7 @@ export default function ProfileEditPage() {
 				{/* 提示信息 */}
 				<Card className="mt-4">
 					<Flex className="pt-4">
-						<div className="text-sm text-gray-600 space-y-1">
+						<div className="space-y-1 text-sm text-gray-600">
 							<p>• 用户名和邮箱为必填项</p>
 							<p>• 头像会自动裁剪为圆形显示</p>
 						</div>

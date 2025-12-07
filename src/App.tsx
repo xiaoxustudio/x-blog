@@ -22,7 +22,7 @@ const regularPosts = postsData.filter((post) => !post.featured);
 function App() {
 	return (
 		<Router>
-			<div className="min-h-screen bg-background">
+			<div className="bg-background min-h-screen">
 				<Header />
 				<main>
 					<Routes>
@@ -33,7 +33,7 @@ function App() {
 									<Hero />
 									<section className="py-12 md:py-24">
 										<div className="container mx-auto px-4">
-											<h2 className="text-3xl font-bold tracking-tight mb-8">
+											<h2 className="mb-8 text-3xl font-bold tracking-tight">
 												精选文章
 											</h2>
 											<div className="grid gap-8">
@@ -47,9 +47,9 @@ function App() {
 										</div>
 									</section>
 
-									<section className="py-12 md:py-24 bg-muted/50">
+									<section className="bg-muted/50 py-12 md:py-24">
 										<div className="container mx-auto px-4">
-											<h2 className="text-3xl font-bold tracking-tight mb-8">
+											<h2 className="mb-8 text-3xl font-bold tracking-tight">
 												最新文章
 											</h2>
 											<div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">

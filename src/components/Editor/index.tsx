@@ -40,7 +40,7 @@ export default function Editor({
 				<Flex
 					wrap="wrap"
 					gap="1"
-					className="p-2 border-b border-gray-200"
+					className="border-b border-gray-200 p-2"
 				>
 					<Toggle
 						pressed={editor?.isActive("bold")}
