@@ -28,22 +28,30 @@ export function PostCard({ post }: PostCardProps) {
 				<Box>
 					<Box className="py-2 text-sm">{post.excerpt}</Box>
 				</Box>
-				<Flex>
+				<Flex direction="column" gap="2" justify="between">
+					<Flex wrap="wrap" gap="2">
+						{post.tags
+							.split(",")
+							.slice(0, 3)
+							.map((tag) => (
+								<Badge key={tag} color="gray">
+									{tag}
+								</Badge>
+							))}
+					</Flex>
 					<Flex
 						align="center"
+						justify="between"
 						className="text-muted-foreground mr-3 mb-3 text-sm"
 					>
-						<User className="mr-1 h-4 w-4" />
-						<span className="mr-4">{post.author}</span>
-						<Calendar className="mr-1 h-4 w-4" />
-						<Text>{post.date}</Text>
-					</Flex>
-					<Flex wrap="wrap" gap="2">
-						{post.tags.slice(0, 3).map((tag) => (
-							<Badge key={tag} color="gray">
-								{tag}
-							</Badge>
-						))}
+						<Text as="p" className="mr-4">
+							<User className="inline mr-1 h-4 w-4" />
+							{post.author}
+						</Text>
+						<Text as="p" className="mr-4">
+							<Calendar className="inline mr-1 h-4 w-4" />
+							{post.date}
+						</Text>
 					</Flex>
 				</Flex>
 			</Card>

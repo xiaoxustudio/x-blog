@@ -1,12 +1,14 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { PostCard } from "@/components/PostCard";
-import { postsData } from "@/data/posts";
 import { Button } from "@/components/Button";
-import type { TagMetadata } from "@/types";
+import type { Post, TagMetadata } from "@/types";
 import GetTags from "@/apis/common/tags";
+import GetPosts from "@/apis/common/posts";
+import { toast } from "sonner";
 
 function ArticlesPage() {
+	const [postsData, setPostsData] = useState<Post[]>([]);
 	const [tagsData, setTagsData] = useState<TagMetadata[]>([]);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const initialTag = searchParams.get("tag");
@@ -18,7 +20,7 @@ function ArticlesPage() {
 			return postsData;
 		}
 		return postsData.filter((post) => post.tags.includes(selectedTag));
-	}, [selectedTag]);
+	}, [postsData, selectedTag]);
 
 	const handleTagClick = (tag: string | null) => {
 		setSelectedTag(tag);
@@ -35,6 +37,13 @@ function ArticlesPage() {
 	useEffect(() => {
 		GetTags().then(({ data }) => {
 			setTagsData(data.data);
+		});
+		GetPosts().then(({ data }) => {
+			if (~data.code) {
+				setPostsData(data.data);
+			} else {
+				toast.error(data.msg);
+			}
 		});
 	}, []);
 

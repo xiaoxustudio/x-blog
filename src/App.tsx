@@ -1,4 +1,4 @@
-import { Toaster } from "sonner";
+import { toast, Toaster } from "sonner";
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 
 import { Header } from "./components/Header";
@@ -7,19 +7,37 @@ import { FeaturedPost } from "./components/FeaturedPost";
 import { PostCard } from "./components/PostCard";
 import { Footer } from "./components/Footer";
 
-import { postsData } from "./data/posts";
-
 import ArticlesPage from "./pages/ArticlesPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import ArticleDetailPage from "./pages/ArticleDetailPage";
 import ProfilePage from "./pages/user/ProfilePage";
 import ProfileEditPage from "./pages/user/EditePage";
 import ArticlePublishPage from "./pages/publish";
-
-const featuredPosts = postsData.filter((post) => post.featured);
-const regularPosts = postsData.filter((post) => !post.featured);
+import GetPosts from "./apis/common/posts";
+import type { Post } from "./types";
+import { useState, useEffect, useMemo } from "react";
 
 function App() {
+	const [postsData, setPostsData] = useState<Post[]>([]);
+	const featuredPosts = useMemo(
+		() => postsData.filter((post) => post.featured),
+		[postsData]
+	);
+	const regularPosts = useMemo(
+		() => postsData.filter((post) => !post.featured),
+		[postsData]
+	);
+
+	useEffect(() => {
+		GetPosts().then(({ data }) => {
+			if (~data.code) {
+				console.log(data.data);
+				setPostsData(data.data);
+			} else {
+				toast.error(data.msg);
+			}
+		});
+	}, []);
 	return (
 		<Router>
 			<div className="bg-background min-h-screen">

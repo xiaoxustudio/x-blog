@@ -37,11 +37,14 @@ export function FeaturedPost({ post }: FeaturedPostProps) {
 								<span>{post.date}</span>
 							</Flex>
 							<Flex className="gap-2">
-								{post.tags.slice(0, 3).map((tag) => (
-									<Badge key={tag} variant="outline">
-										{tag}
-									</Badge>
-								))}
+								{post.tags
+									.split(",")
+									.slice(0, 3)
+									.map((tag) => (
+										<Badge key={tag} variant="outline">
+											{tag}
+										</Badge>
+									))}
 							</Flex>
 						</Flex>
 					</div>

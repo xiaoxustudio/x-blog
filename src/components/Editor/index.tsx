@@ -38,6 +38,9 @@ export default function Editor({
 		editable: !readonly,
 		content: value,
 		contentType: "markdown",
+		onCreate: ({ editor }) => {
+			setCharacterCount(editor.storage.characterCount.characters());
+		},
 		onUpdate: ({ editor }) => {
 			onChange?.(editor.getHTML());
 			setCharacterCount(editor.storage.characterCount.characters());
@@ -122,6 +125,7 @@ export default function Editor({
 					<Button onClick={handleMarkdownPaste}>粘贴Markdown</Button>
 				</Flex>
 			)}
+
 			<EditorContent editor={editor} data-readonly={readonly} />
 
 			<Flex

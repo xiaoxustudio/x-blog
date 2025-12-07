@@ -1,14 +1,28 @@
 import { useParams, Link } from "react-router";
 import { ArrowLeft, Calendar, User } from "lucide-react";
-import { postsData } from "@/data/posts";
 import Editor from "@/components/Editor";
 import { Button } from "@/components/Button";
 import { Badge } from "@radix-ui/themes";
+import type { Post } from "@/types";
+import { useEffect, useState } from "react";
+import GetPosts from "@/apis/common/posts";
+import { toast } from "sonner";
 
 function ArticleDetailPage() {
 	const { id } = useParams<{ id: string }>();
+	const [postsData, setPostsData] = useState<Post[]>([]);
 
 	const post = postsData.find((p) => p.id === Number(id));
+
+	useEffect(() => {
+		GetPosts().then(({ data }) => {
+			if (~data.code) {
+				setPostsData(data.data);
+			} else {
+				toast.error(data.msg);
+			}
+		});
+	}, []);
 
 	if (!post) {
 		return (
@@ -45,7 +59,7 @@ function ArticleDetailPage() {
 						<span>{post.date}</span>
 					</div>
 					<div className="flex flex-wrap gap-2">
-						{post.tags.map((tag) => (
+						{post.tags.split(",").map((tag) => (
 							<Badge key={tag} color="gray">
 								{tag}
 							</Badge>

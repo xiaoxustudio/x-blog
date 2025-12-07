@@ -6,7 +6,7 @@ export interface Post {
 	author: string; // 作者ID
 	date: string; // 发布时间
 	coverImage: string; // base64 图片文本
-	tags: string[]; // 标签
+	tags: string; // 标签
 	featured: boolean; // 是否为推荐文章
 }
 
