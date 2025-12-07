@@ -1,20 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Editor from "@/components/Editor/";
 import useUser from "@/store/user";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/Button";
 import {
+	Badge,
 	Box,
 	Card,
 	Checkbox,
 	Flex,
 	Grid,
 	Heading,
+	ScrollArea,
 	Text,
 	TextArea,
 	TextField
 } from "@radix-ui/themes";
+import type { TagMetadata } from "@/types";
+import GetTags from "@/apis/common/tags";
+import { Plus } from "lucide-react";
+import TagsDialog from "./tagsDialog";
 // import UpdatePublish from "@/apis/user/publish";
 // import { toast } from "sonner";
 
@@ -30,6 +36,8 @@ interface ArticleFormData {
 }
 
 export default function ArticlePublishPage() {
+	const [tagsData, setTagsData] = useState<TagMetadata[]>([]);
+	const [selectDataTags, setSelectDataTags] = useState<string[]>([]); // tags ids
 	const { token, user } = useUser();
 	const navigate = useNavigate();
 	if (!token || !user) {
@@ -109,6 +117,12 @@ export default function ArticlePublishPage() {
 		// 	});
 	};
 
+	useEffect(() => {
+		GetTags().then(({ data }) => {
+			setTagsData(data.data);
+		});
+	}, []);
+
 	return (
 		<div className="container mx-auto max-w-4xl p-4 md:p-6 lg:p-8">
 			<Card>
@@ -185,17 +199,55 @@ export default function ArticlePublishPage() {
 
 						{/* 标签、日期和特色文章 */}
 						<Grid columns={{ xs: "1", md: "3" }} gap="4">
-							<div className="space-y-2">
+							<Flex
+								direction="column"
+								justify="between"
+								className="space-y-2"
+							>
 								<label htmlFor="tags">标签</label>
-								<TextField.Root
-									id="tags"
-									name="tags"
-									value={formData.tags.join(", ")}
-									onChange={handleInputChange}
-									placeholder="React, Next.js, 前端 (用逗号分隔)"
-								/>
-							</div>
-							<div className="space-y-2">
+								<Flex align="center" direction="row" gap="2">
+									<ScrollArea
+										type="always"
+										scrollbars="horizontal"
+										style={{
+											width: "100%",
+											height: "35px"
+										}}
+									>
+										<Flex gap="2" align="end">
+											{selectDataTags.map((name) => {
+												return (
+													<Badge
+														key={name}
+														children={name}
+													/>
+												);
+											})}
+										</Flex>
+									</ScrollArea>
+									<Flex align="start" className="relative">
+										<TagsDialog
+											tags={tagsData}
+											selectData={selectDataTags}
+											trigger={
+												<Button
+													mode="icon"
+													variant="soft"
+												>
+													<Plus
+														width="18"
+														height="18"
+													/>
+												</Button>
+											}
+											onChange={(v) =>
+												setSelectDataTags(v)
+											}
+										/>
+									</Flex>
+								</Flex>
+							</Flex>
+							<Flex direction="column" className="space-y-2">
 								<label htmlFor="date">发布日期</label>
 								<TextField.Root
 									id="date"
@@ -203,9 +255,10 @@ export default function ArticlePublishPage() {
 									type="date"
 									value={formData.date}
 									onChange={handleInputChange}
+									disabled
 								/>
-							</div>
-							<Flex align="center" className="space-x-2 pt-6">
+							</Flex>
+							<Flex align="start" className="space-x-2 pt-10">
 								<Checkbox
 									id="featured"
 									checked={formData.featured}

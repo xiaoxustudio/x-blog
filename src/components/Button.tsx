@@ -1,13 +1,14 @@
 import { cn } from "@/lib/utils";
-import { Button as RDButton } from "@radix-ui/themes";
+import { IconButton, Button as RDButton } from "@radix-ui/themes";
 import type { ButtonProps as RDButtonProps } from "@radix-ui/themes";
 
 export interface ButtonProps extends Partial<RDButtonProps> {
-	mode?: "default" | "primary" | "clear";
+	mode?: "default" | "primary" | "clear" | "icon";
 }
 
 export const Button = ({
 	children,
+	type = "button",
 	mode = "default",
 	className,
 	...props
@@ -37,8 +38,16 @@ export const Button = ({
 		className
 	);
 	return (
-		<RDButton className={classNames} {...props}>
-			{children}
-		</RDButton>
+		<>
+			{mode === "icon" ? (
+				<IconButton type={type} className={classNames} {...props}>
+					{children}
+				</IconButton>
+			) : (
+				<RDButton type={type} className={classNames} {...props}>
+					{children}
+				</RDButton>
+			)}
+		</>
 	);
 };

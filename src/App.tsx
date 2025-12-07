@@ -14,7 +14,7 @@ import CategoriesPage from "./pages/CategoriesPage";
 import ArticleDetailPage from "./pages/ArticleDetailPage";
 import ProfilePage from "./pages/user/ProfilePage";
 import ProfileEditPage from "./pages/user/EditePage";
-import ArticlePublishPage from "./pages/Publish";
+import ArticlePublishPage from "./pages/publish";
 
 const featuredPosts = postsData.filter((post) => post.featured);
 const regularPosts = postsData.filter((post) => !post.featured);
