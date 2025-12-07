@@ -201,7 +201,7 @@ func (u *User) PublishArticle(req *ghttp.Request) {
 			tags[i] = strings.TrimSpace(tags[i])
 			// 判断tags是否在数据库中存在，如果不存在则报错
 			var tag entity.Tags
-			err = dao.Tags.Ctx(ctx).Where("id = ?", tags[i]).Scan(&tag)
+			err = dao.Tags.Ctx(ctx).Where("name = ?", tags[i]).Scan(&tag)
 			if err != nil {
 				return err
 			}
@@ -224,10 +224,10 @@ func (u *User) PublishArticle(req *ghttp.Request) {
 		Featured:   featured,
 	}
 
-	// _, err = dao.Posts.Ctx(ctx).Insert(article)
-	// if err != nil {
-	// 	req.Response.WriteJsonExit(rtool.ToReturn(-1, "发布文章失败", err.Error()))
-	// }
+	_, err = dao.Posts.Ctx(ctx).Insert(article)
+	if err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "发布文章失败", err.Error()))
+	}
 
 	req.Response.WriteJsonExit(rtool.ToReturn(0, "发布文章成功", article))
 }

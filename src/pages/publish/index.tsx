@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -25,6 +25,11 @@ import { Plus } from "lucide-react";
 import TagsDialog from "./tagsDialog";
 import { PostsLimitMap } from "@/lib/consts";
 import { articleSchema, type ArticleFormData } from "@/lib/schemas";
+import { useImageDrop } from "@/hooks/useImageDrop";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import UpdatePublish from "@/apis/user/publish";
+
 // import UpdatePublish from "@/apis/user/publish";
 // import { toast } from "sonner";
 
@@ -55,6 +60,15 @@ export default function ArticlePublishPage() {
 		mode: "onTouched"
 	});
 
+	const handleCoverImageDrop = useCallback(
+		(base64String: string) => {
+			setValue("coverImage", base64String, { shouldValidate: true });
+		},
+		[setValue]
+	);
+
+	const { isDragOver, dropRef } = useImageDrop(handleCoverImageDrop);
+
 	useEffect(() => {
 		GetTags().then(({ data }) => {
 			setTagsData(data.data);
@@ -72,19 +86,14 @@ export default function ArticlePublishPage() {
 			tags: data.tags?.join(",")
 		};
 
-		console.log("提交的数据:", articleToSubmit);
-
-		// UpdatePublish(articleToSubmit)
-		// 	.then(({ data }) => {
-		// 		if (data.code !== 0) { // 假设 0 表示成功
-		// 			toast.error(data.msg);
-		// 		} else {
-		// 			toast.success("文章发布成功！");
-		// 		}
-		// 	})
-		// 	.finally(() => {
-		// 		// isSubmitting 状态会由 RHF 自动管理
-		// 	});
+		UpdatePublish(articleToSubmit).then(({ data }) => {
+			if (data.code !== 0) {
+				// 假设 0 表示成功
+				toast.error(data.msg);
+			} else {
+				toast.success("文章发布成功！");
+			}
+		});
 	};
 
 	return (
@@ -168,12 +177,22 @@ export default function ArticlePublishPage() {
 							</Grid>
 							<Grid columns={{ md: "1" }} className="space-y-2">
 								<label htmlFor="coverImage">封面图 URL</label>
-								<TextField.Root
-									id="coverImage"
-									type="url"
-									{...register("coverImage")}
-									placeholder="https://images.unsplash.com/..."
-								/>
+								<div
+									ref={dropRef}
+									className={cn(
+										"relative rounded-md transition-all duration-200",
+										{
+											"ring-2 ring-blue-500 bg-blue-50":
+												isDragOver
+										}
+									)}
+								>
+									<TextField.Root
+										id="coverImage"
+										{...register("coverImage")}
+										placeholder="https://xxx/ ... 或拖拽图片"
+									/>
+								</div>
 								{errors.coverImage && (
 									<Text color="red" size="1">
 										{errors.coverImage.message}

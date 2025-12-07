@@ -39,7 +39,7 @@ export const articleSchema = z.object({
 
 	date: z.string().min(1, "发布日期是必填项"),
 
-	coverImage: z.string().url("请输入有效的URL").optional().or(z.literal("")),
+	coverImage: z.string(),
 
 	tags: z.array(z.string()).min(1, `标题至少需要一个标签`),
 
