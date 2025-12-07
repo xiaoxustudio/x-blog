@@ -6,6 +6,7 @@ import { Markdown } from "@tiptap/markdown";
 import { Flex, Separator, Text } from "@radix-ui/themes";
 import { Toggle } from "../Toggle";
 import { useReducer, useState } from "react";
+import { Button } from "../Button";
 import "./index.css";
 
 interface EditorProps {
@@ -48,6 +49,19 @@ export default function Editor({
 			}
 		}
 	});
+
+	const handleMarkdownPaste = async () => {
+		if (editor) {
+			const markdown = await navigator.clipboard.readText();
+			if (markdown) {
+				editor
+					.chain()
+					.focus()
+					.setContent(markdown, { contentType: "markdown" })
+					.run();
+			}
+		}
+	};
 
 	const isOverMax = maxLength ? characterCount > maxLength : false;
 	const isUnderMin = minLength ? characterCount < minLength : false;
@@ -105,6 +119,7 @@ export default function Editor({
 					>
 						<ListOrdered className="h-4 w-4" />
 					</Toggle>
+					<Button onClick={handleMarkdownPaste}>粘贴Markdown</Button>
 				</Flex>
 			)}
 			<EditorContent editor={editor} data-readonly={readonly} />
