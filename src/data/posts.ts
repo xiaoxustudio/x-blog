@@ -1,6 +1,4 @@
-import type { Post, TagMetadata } from "@/types";
-
-export const tagsData: TagMetadata[] = [];
+import type { Post } from "@/types";
 
 export const postsData: Post[] = [
 	{

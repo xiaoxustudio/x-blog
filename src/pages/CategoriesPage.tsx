@@ -1,9 +1,12 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
-import { postsData, tagsData } from "@/data/posts";
+import { postsData } from "@/data/posts";
 import { Badge, Box, Card, Flex } from "@radix-ui/themes";
+import GetTags from "@/apis/common/tags";
+import type { TagMetadata } from "@/types";
 
 function CategoriesPage() {
+	const [tagsData, setTagsData] = useState<TagMetadata[]>([]);
 	const tagCounts = useMemo(() => {
 		const counts: { [key: string]: number } = {};
 		postsData.forEach((post) => {
@@ -26,6 +29,12 @@ function CategoriesPage() {
 		const index = Math.min(count - 1, sizes.length - 1);
 		return sizes[index] || sizes[0];
 	};
+
+	useEffect(() => {
+		GetTags().then(({ data }) => {
+			setTagsData(data.data);
+		});
+	}, []);
 
 	return (
 		<div className="container mx-auto px-4 py-12">

@@ -1,19 +1,17 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { PostCard } from "@/components/PostCard";
-import { postsData, tagsData } from "@/data/posts";
+import { postsData } from "@/data/posts";
 import { Button } from "@/components/Button";
-
-const allTags = tagsData.map((t) => t.name);
+import type { TagMetadata } from "@/types";
+import GetTags from "@/apis/common/tags";
 
 function ArticlesPage() {
+	const [tagsData, setTagsData] = useState<TagMetadata[]>([]);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const initialTag = searchParams.get("tag");
 	const [selectedTag, setSelectedTag] = useState<string | null>(initialTag);
-
-	useEffect(() => {
-		setSelectedTag(initialTag);
-	}, [initialTag]);
+	const allTags = tagsData.map((t) => t.name);
 
 	const filteredPosts = useMemo(() => {
 		if (!selectedTag) {
@@ -30,6 +28,15 @@ function ArticlesPage() {
 			setSearchParams({});
 		}
 	};
+	useEffect(() => {
+		setSelectedTag(initialTag);
+	}, [initialTag]);
+
+	useEffect(() => {
+		GetTags().then(({ data }) => {
+			setTagsData(data.data);
+		});
+	}, []);
 
 	return (
 		<div className="container mx-auto px-4 py-12">
