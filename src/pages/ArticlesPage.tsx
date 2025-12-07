@@ -2,18 +2,19 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { PostCard } from "@/components/PostCard";
 import { Button } from "@/components/Button";
-import type { Post, TagMetadata } from "@/types";
+import type { Post } from "@/types";
 import GetTags from "@/apis/common/tags";
 import GetPosts from "@/apis/common/posts";
 import { toast } from "sonner";
+import useTagsStore from "@/store/tags";
 
 function ArticlesPage() {
+	const { setTags, tags } = useTagsStore();
 	const [postsData, setPostsData] = useState<Post[]>([]);
-	const [tagsData, setTagsData] = useState<TagMetadata[]>([]);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const initialTag = searchParams.get("tag");
 	const [selectedTag, setSelectedTag] = useState<string | null>(initialTag);
-	const allTags = tagsData.map((t) => t.name);
+	const allTags = tags.map((t) => t.name);
 
 	const filteredPosts = useMemo(() => {
 		if (!selectedTag) {
@@ -36,7 +37,7 @@ function ArticlesPage() {
 
 	useEffect(() => {
 		GetTags().then(({ data }) => {
-			setTagsData(data.data);
+			setTags(data.data);
 		});
 		GetPosts().then(({ data }) => {
 			if (~data.code) {
@@ -45,7 +46,7 @@ function ArticlesPage() {
 				toast.error(data.msg);
 			}
 		});
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<div className="container mx-auto px-4 py-12">

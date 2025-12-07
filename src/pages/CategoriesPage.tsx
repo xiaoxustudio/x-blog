@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 import { Badge, Box, Card, Flex } from "@radix-ui/themes";
 import GetTags from "@/apis/common/tags";
-import type { Post, TagMetadata } from "@/types";
+import type { Post } from "@/types";
 import GetPosts from "@/apis/common/posts";
 import { toast } from "sonner";
+import useTagsStore from "@/store/tags";
 
 function CategoriesPage() {
+	const { setTags, tags } = useTagsStore();
 	const [postsData, setPostsData] = useState<Post[]>([]);
-	const [tagsData, setTagsData] = useState<TagMetadata[]>([]);
 	const tagCounts = useMemo(() => {
 		const counts: { [key: string]: number } = {};
 		postsData.forEach((post) => {
@@ -34,7 +35,7 @@ function CategoriesPage() {
 
 	useEffect(() => {
 		GetTags().then(({ data }) => {
-			setTagsData(data.data);
+			setTags(data.data);
 		});
 		GetPosts().then(({ data }) => {
 			if (~data.code) {
@@ -43,7 +44,7 @@ function CategoriesPage() {
 				toast.error(data.msg);
 			}
 		});
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<div className="container mx-auto px-4 py-12">
@@ -55,7 +56,7 @@ function CategoriesPage() {
 			</div>
 
 			<div className="mb-16 flex flex-wrap justify-center gap-4">
-				{tagsData.map((tag) => {
+				{tags.map((tag) => {
 					const count = tagCounts[tag.name] || 0;
 					const sizeClass = getTagSize(count);
 
@@ -76,7 +77,7 @@ function CategoriesPage() {
 			</div>
 
 			<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-				{tagsData.map((tag) => {
+				{tags.map((tag) => {
 					const count = tagCounts[tag.name] || 0;
 					return (
 						<Card
