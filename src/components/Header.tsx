@@ -1,20 +1,9 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-	BookOpen,
-	FolderOpen,
-	Home,
-	Menu,
-	Search,
-	User,
-	X
-} from "lucide-react";
+import { BookOpen, FolderOpen, Home, Search, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import useUser from "@/store/user";
+import { TextField } from "@radix-ui/themes";
 
 export function Header() {
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const { token } = useUser();
 
 	return (
@@ -58,26 +47,16 @@ export function Header() {
 				{/* Search Bar */}
 				<div className="hidden md:flex items-center space-x-2">
 					<div className="relative">
-						<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-						<Input
+						<TextField.Root
 							placeholder="搜索文章..."
 							className="pl-8 w-64"
-						/>
+						>
+							<TextField.Slot>
+								<Search className=" h-4 w-4 text-muted-foreground" />
+							</TextField.Slot>
+						</TextField.Root>
 					</div>
 				</div>
-
-				<Button
-					variant="ghost"
-					size="icon"
-					className="md:hidden"
-					onClick={() => setIsMenuOpen(!isMenuOpen)}
-				>
-					{isMenuOpen ? (
-						<X className="h-5 w-5" />
-					) : (
-						<Menu className="h-5 w-5" />
-					)}
-				</Button>
 
 				{token && (
 					<Link
@@ -88,42 +67,6 @@ export function Header() {
 					</Link>
 				)}
 			</div>
-
-			{/* Mobile Navigation */}
-			{isMenuOpen && (
-				<div className="md:hidden border-t bg-background">
-					<nav className="container flex flex-col space-y-3 p-4">
-						<a
-							href="#"
-							className="text-sm font-medium hover:text-primary"
-						>
-							首页
-						</a>
-						<a
-							href="#"
-							className="text-sm font-medium hover:text-primary"
-						>
-							文章
-						</a>
-						<a
-							href="#"
-							className="text-sm font-medium hover:text-primary"
-						>
-							关于
-						</a>
-						<a
-							href="#"
-							className="text-sm font-medium hover:text-primary"
-						>
-							联系
-						</a>
-						<div className="relative pt-2">
-							<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-							<Input placeholder="搜索文章..." className="pl-8" />
-						</div>
-					</nav>
-				</div>
-			)}
 		</header>
 	);
 }

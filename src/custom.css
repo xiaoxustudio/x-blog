@@ -1,0 +1,147 @@
+:root,
+.light,
+.light-theme {
+	--custom-1: #fcfcfc;
+	--custom-2: #f9f9f9;
+	--custom-3: #f0f0f0;
+	--custom-4: #e8e8e8;
+	--custom-5: #e1e1e1;
+	--custom-6: #d9d9d9;
+	--custom-7: #cecece;
+	--custom-8: #bbb;
+	--custom-9: #000;
+	--custom-10: #2e2e2e;
+	--custom-11: #636363;
+	--custom-12: #1f1f1f;
+
+	--custom-a1: #00000003;
+	--custom-a2: #00000006;
+	--custom-a3: #0000000f;
+	--custom-a4: #00000017;
+	--custom-a5: #0000001e;
+	--custom-a6: #00000026;
+	--custom-a7: #00000031;
+	--custom-a8: #00000044;
+	--custom-a9: #000000;
+	--custom-a10: #000000d1;
+	--custom-a11: #0000009c;
+	--custom-a12: #000000e0;
+
+	--custom-contrast: #fff;
+	--custom-surface: #f8f8f8cc;
+	--custom-indicator: #000;
+	--custom-track: #000;
+}
+
+@supports (color: color(display-p3 1 1 1)) {
+	@media (color-gamut: p3) {
+		:root,
+		.light,
+		.light-theme {
+			--custom-1: oklch(99.2% 0 none);
+			--custom-2: oklch(98.1% 0 none);
+			--custom-3: oklch(95.5% 0 none);
+			--custom-4: oklch(93.1% 0 none);
+			--custom-5: oklch(90.9% 0 none);
+			--custom-6: oklch(88.5% 0 none);
+			--custom-7: oklch(85.1% 0 none);
+			--custom-8: oklch(79.2% 0 none);
+			--custom-9: oklch(0% 0 none);
+			--custom-10: oklch(30% 0 none);
+			--custom-11: oklch(50.1% 0 none);
+			--custom-12: oklch(24% 0 none);
+
+			--custom-a1: color(display-p3 0 0 0 / 0.0118);
+			--custom-a2: color(display-p3 0 0 0 / 0.0235);
+			--custom-a3: color(display-p3 0 0 0 / 0.0588);
+			--custom-a4: color(display-p3 0 0 0 / 0.0902);
+			--custom-a5: color(display-p3 0 0 0 / 0.1176);
+			--custom-a6: color(display-p3 0 0 0 / 0.149);
+			--custom-a7: color(display-p3 0 0 0 / 0.1922);
+			--custom-a8: color(display-p3 0 0 0 / 0.2667);
+			--custom-a9: color(display-p3 0 0 0);
+			--custom-a10: color(display-p3 0 0 0 / 0.8196);
+			--custom-a11: color(display-p3 0 0 0 / 0.6118);
+			--custom-a12: color(display-p3 0 0 0 / 0.8784);
+
+			--custom-contrast: #fff;
+			--custom-surface: color(display-p3 0.9725 0.9725 0.9725 / 0.8);
+			--custom-indicator: oklch(0% 0 none);
+			--custom-track: oklch(0% 0 none);
+		}
+	}
+}
+
+:root,
+.light,
+.light-theme {
+	--gray-1: #fcfcfc;
+	--gray-2: #f9f9f9;
+	--gray-3: #f0f0f0;
+	--gray-4: #e8e8e8;
+	--gray-5: #e1e1e1;
+	--gray-6: #d9d9d9;
+	--gray-7: #cecece;
+	--gray-8: #bbb;
+	--gray-9: #8c8c8c;
+	--gray-10: #818181;
+	--gray-11: #636363;
+	--gray-12: #1f1f1f;
+
+	--gray-a1: #00000003;
+	--gray-a2: #00000006;
+	--gray-a3: #0000000f;
+	--gray-a4: #00000017;
+	--gray-a5: #0000001e;
+	--gray-a6: #00000026;
+	--gray-a7: #00000031;
+	--gray-a8: #00000044;
+	--gray-a9: #00000073;
+	--gray-a10: #0000007e;
+	--gray-a11: #0000009c;
+	--gray-a12: #000000e0;
+
+	--gray-contrast: #ffffff;
+	--gray-surface: #ffffffcc;
+	--gray-indicator: #8c8c8c;
+	--gray-track: #8c8c8c;
+}
+
+@supports (color: color(display-p3 1 1 1)) {
+	@media (color-gamut: p3) {
+		:root,
+		.light,
+		.light-theme {
+			--gray-1: oklch(99.2% 0 none);
+			--gray-2: oklch(98.1% 0 none);
+			--gray-3: oklch(95.5% 0 none);
+			--gray-4: oklch(93.1% 0 none);
+			--gray-5: oklch(90.9% 0 none);
+			--gray-6: oklch(88.5% 0 none);
+			--gray-7: oklch(85.1% 0 none);
+			--gray-8: oklch(79.2% 0 none);
+			--gray-9: oklch(63.9% 0 none);
+			--gray-10: oklch(60.5% 0 none);
+			--gray-11: oklch(50.1% 0 none);
+			--gray-12: oklch(24% 0 none);
+
+			--gray-a1: color(display-p3 0 0 0 / 0.0118);
+			--gray-a2: color(display-p3 0 0 0 / 0.0235);
+			--gray-a3: color(display-p3 0 0 0 / 0.0588);
+			--gray-a4: color(display-p3 0 0 0 / 0.0902);
+			--gray-a5: color(display-p3 0 0 0 / 0.1176);
+			--gray-a6: color(display-p3 0 0 0 / 0.149);
+			--gray-a7: color(display-p3 0 0 0 / 0.1922);
+			--gray-a8: color(display-p3 0 0 0 / 0.2667);
+			--gray-a9: color(display-p3 0 0 0 / 0.451);
+			--gray-a10: color(display-p3 0 0 0 / 0.4941);
+			--gray-a11: color(display-p3 0 0 0 / 0.6118);
+			--gray-a12: color(display-p3 0 0 0 / 0.8784);
+
+			--gray-contrast: #ffffff;
+			--gray-surface: color(display-p3 1 1 1 / 80%);
+			--gray-indicator: oklch(63.9% 0 none);
+			--gray-track: oklch(63.9% 0 none);
+		}
+	}
+}

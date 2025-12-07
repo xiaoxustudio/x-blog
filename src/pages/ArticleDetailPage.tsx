@@ -1,9 +1,9 @@
 import { useParams, Link } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import { postsData } from "@/data/posts";
 import Editor from "@/components/Editor";
+import { Button } from "@/components/Button";
+import { Badge } from "@radix-ui/themes";
 
 function ArticleDetailPage() {
 	const { id } = useParams<{ id: string }>();
@@ -18,7 +18,7 @@ function ArticleDetailPage() {
 					抱歉，您访问的文章不存在。
 				</p>
 				<Link to="/articles">
-					<Button>返回文章列表</Button>
+					<Button mode="clear">返回文章列表</Button>
 				</Link>
 			</div>
 		);
@@ -26,8 +26,8 @@ function ArticleDetailPage() {
 
 	return (
 		<div className="container mx-auto px-4 py-12 max-w-4xl">
-			<Link to="/articles">
-				<Button variant="ghost" className="mb-6">
+			<Link to="/articles" className="block -ml-40 sticky top-25 z-50">
+				<Button mode="clear" className="mb-6">
 					<ArrowLeft className="mr-2 h-4 w-4" />
 					返回文章列表
 				</Button>
@@ -46,7 +46,7 @@ function ArticleDetailPage() {
 					</div>
 					<div className="flex gap-2 flex-wrap">
 						{post.tags.map((tag) => (
-							<Badge key={tag} variant="secondary">
+							<Badge key={tag} color="gray">
 								{tag}
 							</Badge>
 						))}

@@ -1,21 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle
-} from "@/components/ui/card";
+
 import useUser from "@/store/user";
 import Login from "@/apis/user/login";
 import GetInfo from "@/apis/user/info";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/Button";
+import {
+	Avatar,
+	Box,
+	Card,
+	Flex,
+	Heading,
+	Text,
+	TextField
+} from "@radix-ui/themes";
 
 export default function ProfilePage() {
 	const [pageMode, setPageMode] = useState<"login" | "register">("login");
@@ -66,21 +65,25 @@ export default function ProfilePage() {
 
 	if (!token || !user) {
 		return (
-			<div className="flex items-center justify-center min-h-screen bg-background">
+			<Flex
+				align="center"
+				justify="center"
+				className="min-h-screen bg-background"
+			>
 				<Card className="w-full max-w-md">
-					<CardHeader>
-						<CardTitle>{isLoginMode ? "登录" : "注册"}</CardTitle>
-						<CardDescription>
+					<Flex gap="2" direction="column">
+						<Heading>{isLoginMode ? "登录" : "注册"}</Heading>
+						<Text as="p" size="2">
 							{isLoginMode
 								? "输入您的邮箱以登录您的账户"
 								: "创建一个新账户以开始使用"}
-						</CardDescription>
-					</CardHeader>
+						</Text>
+					</Flex>
 					<form onSubmit={handleSubmit}>
-						<CardContent className="space-y-4">
+						<Box className="space-y-4">
 							<div className="space-y-2">
-								<Label htmlFor="name">用户名</Label>
-								<Input
+								<label htmlFor="name">用户名</label>
+								<TextField.Root
 									id="name"
 									type="text"
 									placeholder="用户名"
@@ -94,8 +97,8 @@ export default function ProfilePage() {
 
 							{!isLoginMode && (
 								<div className="space-y-2">
-									<Label htmlFor="email">邮箱</Label>
-									<Input
+									<label htmlFor="email">邮箱</label>
+									<TextField.Root
 										id="email"
 										type="email"
 										placeholder="m@example.com"
@@ -108,8 +111,8 @@ export default function ProfilePage() {
 								</div>
 							)}
 							<div className="space-y-2">
-								<Label htmlFor="password">密码</Label>
-								<Input
+								<label htmlFor="password">密码</label>
+								<TextField.Root
 									id="password"
 									type="password"
 									value={password}
@@ -119,10 +122,11 @@ export default function ProfilePage() {
 									required
 								/>
 							</div>
-						</CardContent>
-						<CardFooter className="flex flex-col space-y-4">
+						</Box>
+						<Flex direction="column" className="space-y-4">
 							<Button
 								type="submit"
+								mode="primary"
 								className="w-full"
 								disabled={isLoading}
 							>
@@ -132,25 +136,27 @@ export default function ProfilePage() {
 										? "登录"
 										: "注册"}
 							</Button>
-							<div className="text-sm text-muted-foreground">
+							<Flex
+								gap="2"
+								align="center"
+								justify="between"
+								className="text-sm"
+							>
 								{isLoginMode ? "还没有账户？" : "已有账户？"}
 								<Button
-									type="button"
-									variant="link"
-									className="p-0 h-auto font-normal"
 									onClick={() =>
 										setPageMode(
 											isLoginMode ? "register" : "login"
 										)
 									}
 								>
-									{isLoginMode ? "立即登录" : "立即注册"}
+									{!isLoginMode ? "立即登录" : "立即注册"}
 								</Button>
-							</div>
-						</CardFooter>
+							</Flex>
+						</Flex>
 					</form>
 				</Card>
-			</div>
+			</Flex>
 		);
 	}
 
@@ -170,50 +176,44 @@ export default function ProfilePage() {
 	return (
 		<div className="flex items-center justify-center min-h-screen bg-background">
 			<Card className="w-full max-w-md">
-				<CardHeader className="flex flex-row items-center space-y-0 pb-4">
-					<Avatar className="h-16 w-16">
-						<AvatarImage
-							src={user.avatar}
-							alt={user.nickname || user.username}
-						/>
-						<AvatarFallback className="text-lg">
-							{avatarFallback}
-						</AvatarFallback>
-					</Avatar>
+				<Flex direction="row" align="center" className="space-y-0 pb-4">
+					<Avatar
+						className="h-16 w-16"
+						src={user.avatar}
+						alt={user.nickname || user.username}
+						fallback={avatarFallback}
+					/>
 					<div className="ml-4 space-y-1">
-						<CardTitle className="text-2xl">
+						<Text className="text-2xl">
 							{user.nickname || user.username}
-						</CardTitle>
-						<CardDescription>@{user.username}</CardDescription>
+						</Text>
+						<Text>@{user.username}</Text>
 					</div>
-				</CardHeader>
-				<CardContent className="space-y-4">
-					<div className="flex items-center space-x-2 rounded-md p-2">
-						<Label className="text-sm font-medium w-20">邮箱</Label>
+				</Flex>
+				<Box className="space-y-4">
+					<Flex align="center" className="space-x-2 rounded-md pb-2">
+						<label className="text-sm font-medium w-20">邮箱</label>
 						<p className="text-sm text-muted-foreground flex-1">
 							{user!.email}
 						</p>
-					</div>
-					<div className="flex items-center space-x-2 rounded-md p-2">
-						<Label className="text-sm font-medium w-20">
+					</Flex>
+					<Flex align="center" className="space-x-2 rounded-md pb-2">
+						<label className="text-sm font-medium w-20">
 							注册时间
-						</Label>
+						</label>
 						<p className="text-sm text-muted-foreground flex-1">
 							{formattedDate}
 						</p>
-					</div>
-				</CardContent>
-				<CardFooter className="flex justify-between">
+					</Flex>
+				</Box>
+				<Flex justify="between">
 					<Button
-						variant="outline"
 						onClick={() => navigate("/edit", { replace: true })}
 					>
 						编辑资料
 					</Button>
-					<Button variant="outline" onClick={() => setToken("")}>
-						退出登录
-					</Button>
-				</CardFooter>
+					<Button onClick={() => setToken("")}>退出登录</Button>
+				</Flex>
 			</Card>
 		</div>
 	);

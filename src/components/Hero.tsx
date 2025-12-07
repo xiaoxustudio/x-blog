@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "./Button";
 
 export function Hero() {
 	return (
@@ -12,12 +12,10 @@ export function Hero() {
 					在这里，我分享关于前端开发、软件工程和个人成长的思考与见解。希望能与你一同探索技术的无限可能。
 				</p>
 				<div className="mt-8">
-					<Button size="lg" className="mr-4">
+					<Button className="mr-4!" mode="primary">
 						浏览文章
 					</Button>
-					<Button variant="outline" size="lg">
-						关于我
-					</Button>
+					<Button>关于我</Button>
 				</div>
 			</div>
 		</section>

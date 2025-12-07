@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { PostCard } from "@/components/PostCard";
-import { Button } from "@/components/ui/button";
 import { postsData, tagsData } from "@/data/posts";
+import { Button } from "@/components/Button";
 
 const allTags = tagsData.map((t) => t.name);
 
@@ -44,18 +44,9 @@ function ArticlesPage() {
 			)}
 
 			<div className="mb-8 flex flex-wrap gap-2">
-				<Button
-					variant={selectedTag === null ? "default" : "outline"}
-					onClick={() => handleTagClick(null)}
-				>
-					全部
-				</Button>
+				<Button onClick={() => handleTagClick(null)}>全部</Button>
 				{allTags.map((tag) => (
-					<Button
-						key={tag}
-						variant={selectedTag === tag ? "default" : "outline"}
-						onClick={() => handleTagClick(tag)}
-					>
+					<Button key={tag} onClick={() => handleTagClick(tag)}>
 						{tag}
 					</Button>
 				))}

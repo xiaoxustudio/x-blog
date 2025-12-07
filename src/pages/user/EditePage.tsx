@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Upload, Save, User, Mail, Calendar, Hash } from "lucide-react";
+
 import { toast } from "sonner";
 import useUser from "@/store/user";
 import GetInfo from "@/apis/user/info";
 import { useNavigate } from "react-router-dom";
 import UpdateEdit from "@/apis/user/edit";
+import { Button } from "@/components/Button";
+import { Avatar, Box, Card, Flex, Text, TextField } from "@radix-ui/themes";
+import { Calendar, Hash, Mail, Save, Upload, User } from "lucide-react";
 
 interface UserProfile {
 	id: number;
@@ -109,41 +101,40 @@ export default function ProfileEditPage() {
 		<div className="min-h-screen bg-gray-50 py-8 px-4">
 			<div className="max-w-2xl mx-auto">
 				<Card>
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2">
+					<Box>
+						<Flex align="center" gap="2">
 							<User className="h-5 w-5" />
 							编辑个人资料
-						</CardTitle>
-						<CardDescription>
-							更新您的个人信息和头像
-						</CardDescription>
-					</CardHeader>
-					<CardContent>
+						</Flex>
+						<Text size="1">更新您的个人信息和头像</Text>
+					</Box>
+					<Box>
 						<form onSubmit={handleSubmit} className="space-y-6">
 							{/* 头像上传区域 */}
-							<div className="flex flex-col items-center space-y-4">
+							<Flex
+								direction="column"
+								align="center"
+								className="space-y-4"
+							>
 								<div className="relative group">
-									<Avatar className="h-24 w-24">
-										<AvatarImage
-											src={avatarPreview}
-											alt="用户头像"
-										/>
-										<AvatarFallback className="text-2xl">
-											{profile.username
-												?.charAt(0)
-												?.toUpperCase() || "U"}
-										</AvatarFallback>
-									</Avatar>
+									<Avatar
+										className="h-24 w-24"
+										src={avatarPreview}
+										alt="用户头像"
+										fallback={
+											<User className="h-24 w-24" />
+										}
+									/>
 								</div>
-								<div className="flex flex-col items-center">
-									<Label
+								<Flex align="center" direction="column">
+									<label
 										htmlFor="avatar-upload"
 										className="cursor-pointer text-sm text-blue-600 hover:text-blue-700 flex items-center gap-2"
 									>
 										<Upload className="h-4 w-4" />
 										更换头像
-									</Label>
-									<Input
+									</label>
+									<input
 										id="avatar-upload"
 										type="file"
 										accept="image/*"
@@ -153,20 +144,20 @@ export default function ProfileEditPage() {
 									<p className="text-xs text-gray-500 mt-1">
 										支持 JPG、PNG 格式，最大 5MB
 									</p>
-								</div>
-							</div>
+								</Flex>
+							</Flex>
 
 							{/* 基本信息 */}
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 								<div className="space-y-2">
-									<Label
+									<label
 										htmlFor="username"
 										className="flex items-center gap-2"
 									>
 										<User className="h-4 w-4" />
 										用户名
-									</Label>
-									<Input
+									</label>
+									<TextField.Root
 										id="username"
 										value={profile.username}
 										onChange={(e) =>
@@ -182,14 +173,14 @@ export default function ProfileEditPage() {
 								</div>
 
 								<div className="space-y-2">
-									<Label
+									<label
 										htmlFor="nickname"
 										className="flex items-center gap-2"
 									>
 										<User className="h-4 w-4" />
 										昵称
-									</Label>
-									<Input
+									</label>
+									<TextField.Root
 										id="nickname"
 										value={profile.nickname}
 										onChange={(e) =>
@@ -204,14 +195,14 @@ export default function ProfileEditPage() {
 							</div>
 
 							<div className="space-y-2">
-								<Label
+								<label
 									htmlFor="email"
 									className="flex items-center gap-2"
 								>
 									<Mail className="h-4 w-4" />
 									邮箱地址
-								</Label>
-								<Input
+								</label>
+								<TextField.Root
 									id="email"
 									type="email"
 									value={profile.email}
@@ -233,14 +224,14 @@ export default function ProfileEditPage() {
 								</h3>
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 									<div className="space-y-2">
-										<Label
+										<label
 											htmlFor="id"
 											className="flex items-center gap-2"
 										>
 											<Hash className="h-4 w-4" />
 											用户 ID
-										</Label>
-										<Input
+										</label>
+										<TextField.Root
 											id="id"
 											value={profile.id}
 											disabled
@@ -249,14 +240,14 @@ export default function ProfileEditPage() {
 									</div>
 
 									<div className="space-y-2">
-										<Label
+										<label
 											htmlFor="createdAt"
 											className="flex items-center gap-2"
 										>
 											<Calendar className="h-4 w-4" />
 											注册时间
-										</Label>
-										<Input
+										</label>
+										<TextField.Root
 											id="createdAt"
 											value={new Date(
 												profile.createdAt
@@ -272,7 +263,6 @@ export default function ProfileEditPage() {
 							<div className="flex justify-end gap-3 pt-4">
 								<Button
 									type="button"
-									variant="outline"
 									onClick={handleBack}
 									disabled={isLoading}
 								>
@@ -280,6 +270,7 @@ export default function ProfileEditPage() {
 								</Button>
 								<Button
 									type="submit"
+									mode="primary"
 									disabled={isLoading}
 									className="min-w-[100px]"
 								>
@@ -297,17 +288,17 @@ export default function ProfileEditPage() {
 								</Button>
 							</div>
 						</form>
-					</CardContent>
+					</Box>
 				</Card>
 
 				{/* 提示信息 */}
 				<Card className="mt-4">
-					<CardContent className="pt-4">
+					<Flex className="pt-4">
 						<div className="text-sm text-gray-600 space-y-1">
 							<p>• 用户名和邮箱为必填项</p>
 							<p>• 头像会自动裁剪为圆形显示</p>
 						</div>
-					</CardContent>
+					</Flex>
 				</Card>
 			</div>
 		</div>

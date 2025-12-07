@@ -1,19 +1,20 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
+
 import Editor from "@/components/Editor/";
 import useUser from "@/store/user";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/Button";
+import {
+	Box,
+	Card,
+	Checkbox,
+	Flex,
+	Grid,
+	Heading,
+	Text,
+	TextArea,
+	TextField
+} from "@radix-ui/themes";
 // import UpdatePublish from "@/apis/user/publish";
 // import { toast } from "sonner";
 
@@ -51,7 +52,6 @@ export default function ArticlePublishPage() {
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
 		const { name, value } = e.target;
-		console.log(name);
 		switch (name) {
 			case "tags": {
 				setFormData((prev) => ({
@@ -112,19 +112,19 @@ export default function ArticlePublishPage() {
 	return (
 		<div className="container mx-auto p-4 md:p-6 lg:p-8 max-w-4xl">
 			<Card>
-				<CardHeader>
-					<CardTitle>发布新文章</CardTitle>
-					<CardDescription>
+				<Flex direction="column" gap="2" className="pb-4">
+					<Heading>发布新文章</Heading>
+					<Text as="p" size="2">
 						填写下方表单来创建你的文章。
-					</CardDescription>
-				</CardHeader>
-				<CardContent>
+					</Text>
+				</Flex>
+				<Box>
 					<form onSubmit={handleSubmit} className="space-y-6">
 						{/* 标题和作者 */}
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<Grid columns={{ xs: "1", md: "2" }} gap="4">
 							<div className="space-y-2">
-								<Label htmlFor="title">文章标题</Label>
-								<Input
+								<label htmlFor="title">文章标题</label>
+								<TextField.Root
 									id="title"
 									name="title"
 									value={formData.title}
@@ -134,8 +134,8 @@ export default function ArticlePublishPage() {
 								/>
 							</div>
 							<div className="space-y-2">
-								<Label htmlFor="author">作者</Label>
-								<Input
+								<label htmlFor="author">作者</label>
+								<TextField.Root
 									id="author"
 									name="author"
 									value={formData.author}
@@ -143,13 +143,16 @@ export default function ArticlePublishPage() {
 									disabled
 								/>
 							</div>
-						</div>
+						</Grid>
 
 						{/* 摘要和封面图 */}
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-							<div className="space-y-2 md:col-span-1">
-								<Label htmlFor="excerpt">文章摘要</Label>
-								<Textarea
+						<Grid columns={{ xs: "1", md: "2" }} gap="4">
+							<Grid
+								columns={{ md: "1" }}
+								className="space-y-2 md:col-span-1"
+							>
+								<label htmlFor="excerpt">文章摘要</label>
+								<TextArea
 									id="excerpt"
 									name="excerpt"
 									value={formData.excerpt}
@@ -157,10 +160,10 @@ export default function ArticlePublishPage() {
 									placeholder="简要描述文章内容，用于 SEO 和列表展示"
 									rows={3}
 								/>
-							</div>
-							<div className="space-y-2 md:col-span-1">
-								<Label htmlFor="coverImage">封面图 URL</Label>
-								<Input
+							</Grid>
+							<Grid columns={{ md: "1" }} className="space-y-2">
+								<label htmlFor="coverImage">封面图 URL</label>
+								<TextField.Root
 									id="coverImage"
 									name="coverImage"
 									type="url"
@@ -168,12 +171,12 @@ export default function ArticlePublishPage() {
 									onChange={handleInputChange}
 									placeholder="https://images.unsplash.com/..."
 								/>
-							</div>
-						</div>
+							</Grid>
+						</Grid>
 
 						{/* 内容编辑器 */}
 						<div className="space-y-2">
-							<Label htmlFor="content">正文内容</Label>
+							<label htmlFor="content">正文内容</label>
 							<Editor
 								value={formData.content}
 								onChange={handleContentChange}
@@ -181,10 +184,10 @@ export default function ArticlePublishPage() {
 						</div>
 
 						{/* 标签、日期和特色文章 */}
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+						<Grid columns={{ xs: "1", md: "3" }} gap="4">
 							<div className="space-y-2">
-								<Label htmlFor="tags">标签</Label>
-								<Input
+								<label htmlFor="tags">标签</label>
+								<TextField.Root
 									id="tags"
 									name="tags"
 									value={formData.tags.join(", ")}
@@ -193,8 +196,8 @@ export default function ArticlePublishPage() {
 								/>
 							</div>
 							<div className="space-y-2">
-								<Label htmlFor="date">发布日期</Label>
-								<Input
+								<label htmlFor="date">发布日期</label>
+								<TextField.Root
 									id="date"
 									name="date"
 									type="date"
@@ -202,29 +205,33 @@ export default function ArticlePublishPage() {
 									onChange={handleInputChange}
 								/>
 							</div>
-							<div className="flex items-center space-x-2 pt-6">
+							<Flex align="center" className="space-x-2 pt-6">
 								<Checkbox
 									id="featured"
 									checked={formData.featured}
 									onCheckedChange={handleCheckboxChange}
 								/>
-								<Label
+								<label
 									htmlFor="featured"
-									className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+									className="pl-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 								>
 									设为特色文章
-								</Label>
-							</div>
-						</div>
+								</label>
+							</Flex>
+						</Grid>
 
 						{/* 提交按钮 */}
-						<div className="flex justify-end pt-4">
-							<Button type="submit" disabled={isSubmitting}>
+						<Flex justify="end">
+							<Button
+								type="submit"
+								mode="primary"
+								disabled={isSubmitting}
+							>
 								{isSubmitting ? "发布中..." : "发布文章"}
 							</Button>
-						</div>
+						</Flex>
 					</form>
-				</CardContent>
+				</Box>
 			</Card>
 		</div>
 	);

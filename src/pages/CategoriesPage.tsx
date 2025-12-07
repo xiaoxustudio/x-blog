@@ -1,14 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { postsData, tagsData } from "@/data/posts";
-import { Badge } from "@/components/ui/badge";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle
-} from "@/components/ui/card";
+import { Badge, Box, Card, Flex } from "@radix-ui/themes";
 
 function CategoriesPage() {
 	const tagCounts = useMemo(() => {
@@ -54,7 +47,7 @@ function CategoriesPage() {
 							to={`/articles?tag=${encodeURIComponent(tag.name)}`}
 						>
 							<Badge
-								variant="secondary"
+								color="gray"
 								className={`${sizeClass} px-4 py-2 cursor-pointer transition-transform hover:scale-110 ${tag.color} text-white hover:opacity-90`}
 							>
 								{tag.name} ({count})
@@ -72,25 +65,27 @@ function CategoriesPage() {
 							key={tag.name}
 							className="transition-shadow hover:shadow-lg"
 						>
-							<CardHeader>
-								<CardTitle className="flex items-center justify-between">
+							<Box>
+								<Flex align="center" justify="between">
 									<span>{tag.name}</span>
 									<Badge variant="outline">
 										{count} 篇文章
 									</Badge>
-								</CardTitle>
-								<CardDescription>
-									{tag.description}
-								</CardDescription>
-							</CardHeader>
-							<CardContent>
+								</Flex>
+								<Flex>{tag.description}</Flex>
+							</Box>
+							<Box>
 								<Link
 									to={`/articles?tag=${encodeURIComponent(tag.name)}`}
-									className="text-sm text-primary hover:underline"
+									className="text-gray-400 text-sm text-primary hover:underline"
 								>
-									查看所有 "{tag.name}" 文章 →
+									查看所有 "
+									<strong className="text-black/50">
+										{tag.name}
+									</strong>
+									" 文章 →
 								</Link>
-							</CardContent>
+							</Box>
 						</Card>
 					);
 				})}

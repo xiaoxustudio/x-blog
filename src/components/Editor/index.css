@@ -49,9 +49,7 @@
 		"Noto Color Emoji";
 	line-height: 1.7;
 	color: var(--ProseMirror-color);
-	background-color: var(--ProseMirror-bg-color);
 	border-radius: 8px;
-	box-shadow: var(--ProseMirror-shadow);
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 }

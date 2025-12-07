@@ -1,9 +1,10 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Separator } from "@/components/ui/separator";
 import { Bold, Italic, List, ListOrdered, Strikethrough } from "lucide-react";
-import { Toggle } from "@/components/ui/toggle";
 import { Markdown } from "@tiptap/markdown";
+import { Flex, Separator } from "@radix-ui/themes";
+import { Toggle } from "../Toggle";
+import { useReducer } from "react";
 import "./index.css";
 
 interface EditorProps {
@@ -17,6 +18,7 @@ export default function Editor({
 	onChange,
 	readonly = false
 }: EditorProps) {
+	const [, forceUpdate] = useReducer((x) => x + 1, 0);
 	const editor = useEditor({
 		extensions: [StarterKit, Markdown],
 		editable: !readonly,
@@ -24,7 +26,8 @@ export default function Editor({
 		contentType: "markdown",
 		onUpdate: ({ editor }) => {
 			onChange?.(editor.getHTML());
-		}
+		},
+		onSelectionUpdate: () => forceUpdate()
 	});
 
 	if (!editor) {
@@ -32,12 +35,15 @@ export default function Editor({
 	}
 
 	return (
-		<div className={`rounded-md ${!readonly ? "border" : ""}`}>
+		<div className="rounded-md border border-gray-200">
 			{!readonly && (
-				<div className="flex flex-wrap gap-1 p-2 border-b">
+				<Flex
+					wrap="wrap"
+					gap="1"
+					className="p-2 border-b border-gray-200"
+				>
 					<Toggle
-						size="sm"
-						pressed={editor.isActive("bold")}
+						pressed={editor?.isActive("bold")}
 						onPressedChange={() =>
 							editor.chain().focus().toggleBold().run()
 						}
@@ -45,8 +51,7 @@ export default function Editor({
 						<Bold className="h-4 w-4" />
 					</Toggle>
 					<Toggle
-						size="sm"
-						pressed={editor.isActive("italic")}
+						pressed={editor?.isActive("italic")}
 						onPressedChange={() =>
 							editor.chain().focus().toggleItalic().run()
 						}
@@ -54,18 +59,16 @@ export default function Editor({
 						<Italic className="h-4 w-4" />
 					</Toggle>
 					<Toggle
-						size="sm"
-						pressed={editor.isActive("strike")}
+						pressed={editor?.isActive("strike")}
 						onPressedChange={() =>
 							editor.chain().focus().toggleStrike().run()
 						}
 					>
 						<Strikethrough className="h-4 w-4" />
 					</Toggle>
-					<Separator orientation="vertical" className="mx-1 h-7" />
+					<Separator mx="2" my="4" orientation="vertical" />
 					<Toggle
-						size="sm"
-						pressed={editor.isActive("bulletList")}
+						pressed={editor?.isActive("bulletList")}
 						onPressedChange={() =>
 							editor.chain().focus().toggleBulletList().run()
 						}
@@ -73,15 +76,14 @@ export default function Editor({
 						<List className="h-4 w-4" />
 					</Toggle>
 					<Toggle
-						size="sm"
-						pressed={editor.isActive("orderedList")}
+						pressed={editor?.isActive("orderedList")}
 						onPressedChange={() =>
 							editor.chain().focus().toggleOrderedList().run()
 						}
 					>
 						<ListOrdered className="h-4 w-4" />
 					</Toggle>
-				</div>
+				</Flex>
 			)}
 			<EditorContent editor={editor} data-readonly={readonly} />
 		</div>

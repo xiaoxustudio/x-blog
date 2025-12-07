@@ -1,12 +1,5 @@
-import type { Post } from "@/data/posts";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import type { Post } from "@/types";
+import { Badge, Box, Card, Flex, Text } from "@radix-ui/themes";
 import { Calendar, User } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -17,31 +10,39 @@ interface PostCardProps {
 export function PostCard({ post }: PostCardProps) {
 	return (
 		<Link to={`/articles/${post.id}`}>
-			<Card className="overflow-hidden transition-shadow hover:shadow-lg border-none cursor-pointer">
-				<img
-					src={post.coverImage}
-					alt={post.title}
-					className="h-48 w-full object-cover"
-				/>
-				<CardHeader>
-					<CardTitle className="text-xl">{post.title}</CardTitle>
-					<CardDescription>{post.excerpt}</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<div className="flex items-center text-sm text-muted-foreground mb-3">
+			<Card className="overflow-hidden transition-shadow hover:shadow-lg cursor-pointer">
+				<Box className="relative m-2 group">
+					<img
+						src={post.coverImage}
+						alt={post.title}
+						className="w-full h-45 object-cover rounded-md mb-2"
+					/>
+					<Text
+						size="4"
+						as="div"
+						className=" pl-2 opacity-30 transition-opacity duration-500 group-hover:opacity-100 text-xl absolute bottom-2 text-white bg-[#00000080] rounded-r-md"
+					>
+						{post.title}
+					</Text>
+				</Box>
+				<Box>
+					<Box className="text-sm py-2">{post.excerpt}</Box>
+				</Box>
+				<Flex>
+					<div className="flex items-center text-sm text-muted-foreground mb-3 mr-3">
 						<User className="mr-1 h-4 w-4" />
 						<span className="mr-4">{post.author}</span>
 						<Calendar className="mr-1 h-4 w-4" />
-						<span>{post.date}</span>
+						<Text>{post.date}</Text>
 					</div>
 					<div className="flex gap-2 flex-wrap">
-						{post.tags.map((tag) => (
-							<Badge key={tag} variant="secondary">
+						{post.tags.slice(0, 3).map((tag) => (
+							<Badge key={tag} color="gray">
 								{tag}
 							</Badge>
 						))}
 					</div>
-				</CardContent>
+				</Flex>
 			</Card>
 		</Link>
 	);
