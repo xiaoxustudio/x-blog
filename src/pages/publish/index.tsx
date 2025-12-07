@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import Editor from "@/components/Editor/";
 import useUser from "@/store/user";
@@ -21,107 +23,69 @@ import type { TagMetadata } from "@/types";
 import GetTags from "@/apis/common/tags";
 import { Plus } from "lucide-react";
 import TagsDialog from "./tagsDialog";
+import { PostsLimitMap } from "@/lib/consts";
+import { articleSchema, type ArticleFormData } from "@/lib/schemas";
 // import UpdatePublish from "@/apis/user/publish";
 // import { toast } from "sonner";
 
-interface ArticleFormData {
-	title: string;
-	excerpt: string;
-	content: string;
-	author: string;
-	date: string;
-	coverImage: string;
-	tags: string[];
-	featured: boolean;
-}
-
 export default function ArticlePublishPage() {
 	const [tagsData, setTagsData] = useState<TagMetadata[]>([]);
-	const [selectDataTags, setSelectDataTags] = useState<string[]>([]); // tags ids
 	const { token, user } = useUser();
 	const navigate = useNavigate();
-	if (!token || !user) {
-		navigate("/login");
-	}
-	const [formData, setFormData] = useState<ArticleFormData>({
-		title: "",
-		excerpt: "",
-		content: "",
-		author: user!.username || "",
-		date: new Date().toISOString().split("T")[0],
-		coverImage: "",
-		tags: [],
-		featured: false
+
+	const {
+		register,
+		handleSubmit,
+		control,
+		setValue,
+		watch,
+		formState: { errors, isSubmitting }
+	} = useForm<ArticleFormData>({
+		resolver: zodResolver(articleSchema),
+		defaultValues: {
+			title: "",
+			excerpt: "",
+			content: "",
+			author: user!.username || "",
+			date: new Date().toISOString().split("T")[0],
+			coverImage: "",
+			tags: [],
+			featured: false
+		},
+		mode: "onTouched"
 	});
-
-	const [isSubmitting, setIsSubmitting] = useState(false);
-
-	const handleInputChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-	) => {
-		const { name, value } = e.target;
-		switch (name) {
-			case "tags": {
-				setFormData((prev) => ({
-					...prev,
-					tags: value.split(",").map((tag) => tag.trim())
-				}));
-				break;
-			}
-			case "title": {
-				setFormData((prev) => ({
-					...prev,
-					title: value
-				}));
-				break;
-			}
-			case "excerpt": {
-				setFormData((prev) => ({
-					...prev,
-					excerpt: value
-				}));
-				break;
-			}
-		}
-	};
-
-	const handleContentChange = (value: string) => {
-		setFormData((prev) => ({ ...prev, content: value }));
-	};
-
-	const handleCheckboxChange = (checked: boolean) => {
-		setFormData((prev) => ({ ...prev, featured: checked }));
-	};
-
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setIsSubmitting(true);
-
-		const articleToSubmit = {
-			...formData,
-			tags: formData.tags.map((tag) => tag.trim()).join(",")
-		};
-
-		console.log(articleToSubmit);
-
-		// UpdatePublish(articleToSubmit)
-		// 	.then(({ data }) => {
-		// 		if (~data.code) {
-		// 			toast.error(data.msg);
-		// 		} else {
-		// 			toast.success("文章发布成功！");
-		// 		}
-		// 	})
-		// 	.finally(() => {
-		// 		setIsSubmitting(false);
-		// 	});
-	};
 
 	useEffect(() => {
 		GetTags().then(({ data }) => {
 			setTagsData(data.data);
 		});
 	}, []);
+
+	if (!token || !user) {
+		navigate("/login");
+		return null;
+	}
+
+	const onSubmit = async (data: ArticleFormData) => {
+		const articleToSubmit = {
+			...data,
+			tags: data.tags?.join(",")
+		};
+
+		console.log("提交的数据:", articleToSubmit);
+
+		// UpdatePublish(articleToSubmit)
+		// 	.then(({ data }) => {
+		// 		if (data.code !== 0) { // 假设 0 表示成功
+		// 			toast.error(data.msg);
+		// 		} else {
+		// 			toast.success("文章发布成功！");
+		// 		}
+		// 	})
+		// 	.finally(() => {
+		// 		// isSubmitting 状态会由 RHF 自动管理
+		// 	});
+	};
 
 	return (
 		<div className="container mx-auto max-w-4xl p-4 md:p-6 lg:p-8">
@@ -133,29 +97,47 @@ export default function ArticlePublishPage() {
 					</Text>
 				</Flex>
 				<Box>
-					<form onSubmit={handleSubmit} className="space-y-6">
+					<form
+						onSubmit={handleSubmit(onSubmit)}
+						className="space-y-6"
+					>
 						{/* 标题和作者 */}
 						<Grid columns={{ xs: "1", md: "2" }} gap="4">
 							<div className="space-y-2">
-								<label htmlFor="title">文章标题</label>
+								<label htmlFor="title">
+									文章标题
+									<Text size="1">
+										{/* eslint-disable-next-line react-hooks/incompatible-library */}
+										({watch("title").length}/
+										{PostsLimitMap.TitleMaxLength})
+									</Text>
+								</label>
 								<TextField.Root
 									id="title"
-									name="title"
-									value={formData.title}
-									onChange={handleInputChange}
+									{...register("title")}
+									maxLength={PostsLimitMap.TitleMaxLength}
+									minLength={PostsLimitMap.TitleMinLength}
 									placeholder="输入一个吸引人的标题"
-									required
 								/>
+								{errors.title && (
+									<Text color="red" size="1">
+										{errors.title.message}
+									</Text>
+								)}
 							</div>
 							<div className="space-y-2">
 								<label htmlFor="author">作者</label>
 								<TextField.Root
 									id="author"
-									name="author"
-									value={formData.author}
+									{...register("author")}
 									placeholder="张三"
 									disabled
 								/>
+								{errors.author && (
+									<Text color="red" size="1">
+										{errors.author.message}
+									</Text>
+								)}
 							</div>
 						</Grid>
 
@@ -165,36 +147,65 @@ export default function ArticlePublishPage() {
 								columns={{ md: "1" }}
 								className="space-y-2 md:col-span-1"
 							>
-								<label htmlFor="excerpt">文章摘要</label>
+								<label htmlFor="excerpt">
+									文章摘要
+									<Text size="1">
+										({watch("excerpt").length}/
+										{PostsLimitMap.ExcerptMaxLength})
+									</Text>
+								</label>
 								<TextArea
 									id="excerpt"
-									name="excerpt"
-									value={formData.excerpt}
-									onChange={handleInputChange}
+									{...register("excerpt")}
 									placeholder="简要描述文章内容，用于 SEO 和列表展示"
 									rows={3}
 								/>
+								{errors.excerpt && (
+									<Text color="red" size="1">
+										{errors.excerpt.message}
+									</Text>
+								)}
 							</Grid>
 							<Grid columns={{ md: "1" }} className="space-y-2">
 								<label htmlFor="coverImage">封面图 URL</label>
 								<TextField.Root
 									id="coverImage"
-									name="coverImage"
 									type="url"
-									value={formData.coverImage}
-									onChange={handleInputChange}
+									{...register("coverImage")}
 									placeholder="https://images.unsplash.com/..."
 								/>
+								{errors.coverImage && (
+									<Text color="red" size="1">
+										{errors.coverImage.message}
+									</Text>
+								)}
 							</Grid>
 						</Grid>
 
 						{/* 内容编辑器 */}
 						<div className="space-y-2">
 							<label htmlFor="content">正文内容</label>
-							<Editor
-								value={formData.content}
-								onChange={handleContentChange}
+							<Controller
+								name="content"
+								control={control}
+								render={({ field }) => (
+									<Editor
+										value={field.value}
+										onChange={field.onChange}
+										maxLength={
+											PostsLimitMap.ContentMaxLength
+										}
+										minLength={
+											PostsLimitMap.ContentMinLength
+										}
+									/>
+								)}
 							/>
+							{errors.content && (
+								<Text color="red" size="1">
+									{errors.content.message}
+								</Text>
+							)}
 						</div>
 
 						{/* 标签、日期和特色文章 */}
@@ -215,20 +226,18 @@ export default function ArticlePublishPage() {
 										}}
 									>
 										<Flex gap="2" align="end">
-											{selectDataTags.map((name) => {
-												return (
-													<Badge
-														key={name}
-														children={name}
-													/>
-												);
-											})}
+											{watch("tags")?.map((name) => (
+												<Badge
+													key={name}
+													children={name}
+												/>
+											))}
 										</Flex>
 									</ScrollArea>
 									<Flex align="start" className="relative">
 										<TagsDialog
 											tags={tagsData}
-											selectData={selectDataTags}
+											selectData={watch("tags") || []}
 											trigger={
 												<Button
 													mode="icon"
@@ -240,33 +249,49 @@ export default function ArticlePublishPage() {
 													/>
 												</Button>
 											}
-											onChange={(v) =>
-												setSelectDataTags(v)
+											onChange={(newTags) =>
+												setValue("tags", newTags, {
+													shouldValidate: true
+												})
 											}
 										/>
 									</Flex>
 								</Flex>
+								{errors.tags && (
+									<Text color="red" size="1">
+										{errors.tags.message}
+									</Text>
+								)}
 							</Flex>
 							<Flex direction="column" className="space-y-2">
 								<label htmlFor="date">发布日期</label>
 								<TextField.Root
 									id="date"
-									name="date"
 									type="date"
-									value={formData.date}
-									onChange={handleInputChange}
+									{...register("date")}
 									disabled
 								/>
+								{errors.date && (
+									<Text color="red" size="1">
+										{errors.date.message}
+									</Text>
+								)}
 							</Flex>
 							<Flex align="start" className="space-x-2 pt-10">
-								<Checkbox
-									id="featured"
-									checked={formData.featured}
-									onCheckedChange={handleCheckboxChange}
+								<Controller
+									name="featured"
+									control={control}
+									render={({ field }) => (
+										<Checkbox
+											id="featured"
+											checked={field.value}
+											onCheckedChange={field.onChange}
+										/>
+									)}
 								/>
 								<label
 									htmlFor="featured"
-									className="pl-2 text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+									className="pl-2 text-sm leading-none font-medium"
 								>
 									设为特色文章
 								</label>

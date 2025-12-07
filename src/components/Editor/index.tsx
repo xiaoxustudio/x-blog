@@ -1,34 +1,56 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import CharacterCount from "@tiptap/extension-character-count";
 import { Bold, Italic, List, ListOrdered, Strikethrough } from "lucide-react";
 import { Markdown } from "@tiptap/markdown";
-import { Flex, Separator } from "@radix-ui/themes";
+import { Flex, Separator, Text } from "@radix-ui/themes";
 import { Toggle } from "../Toggle";
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import "./index.css";
 
 interface EditorProps {
 	value: string;
 	onChange?: (value: string) => void;
 	readonly?: boolean;
+	maxLength?: number;
+	minLength?: number;
 }
 
 export default function Editor({
 	value,
 	onChange,
-	readonly = false
+	readonly = false,
+	maxLength,
+	minLength = 0
 }: EditorProps) {
 	const [, forceUpdate] = useReducer((x) => x + 1, 0);
+	const [characterCount, setCharacterCount] = useState(0);
+
 	const editor = useEditor({
-		extensions: [StarterKit, Markdown],
+		extensions: [
+			StarterKit,
+			Markdown,
+			CharacterCount.configure({
+				limit: maxLength
+			})
+		],
 		editable: !readonly,
 		content: value,
 		contentType: "markdown",
 		onUpdate: ({ editor }) => {
 			onChange?.(editor.getHTML());
+			setCharacterCount(editor.storage.characterCount.characters());
 		},
-		onSelectionUpdate: () => forceUpdate()
+		onTransaction: () => {
+			if (editor) {
+				forceUpdate();
+				setCharacterCount(editor.storage.characterCount.characters());
+			}
+		}
 	});
+
+	const isOverMax = maxLength ? characterCount > maxLength : false;
+	const isUnderMin = minLength ? characterCount < minLength : false;
 
 	if (!editor) {
 		return null;
@@ -86,6 +108,27 @@ export default function Editor({
 				</Flex>
 			)}
 			<EditorContent editor={editor} data-readonly={readonly} />
+
+			<Flex
+				align="center"
+				justify="between"
+				className=" border-t border-gray-200 p-2"
+			>
+				<Text size="1" color="gray" as="span">
+					{characterCount}
+					{maxLength && ` / ${maxLength}`} 字符
+				</Text>
+				{isOverMax && (
+					<Text size="1" color="red" as="span" weight="medium">
+						超出最大 {maxLength} 字符
+					</Text>
+				)}
+				{isUnderMin && (
+					<Text size="1" color="amber" as="span" weight="medium">
+						请输入至少 {minLength} 字符
+					</Text>
+				)}
+			</Flex>
 		</div>
 	);
 }

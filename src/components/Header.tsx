@@ -2,15 +2,25 @@ import { BookOpen, FolderOpen, Home, Search, User } from "lucide-react";
 import { Link } from "react-router";
 import useUser from "@/store/user";
 import { TextField } from "@radix-ui/themes";
+import { useStickyScroll } from "@/hooks/useStickyScroll";
+import { cn } from "@/lib/utils";
 
 export function Header() {
 	const { token } = useUser();
+	const { isStuck } = useStickyScroll();
 
 	return (
-		<header className="bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full backdrop-blur">
+		<header
+			className={cn(
+				"bg-background/95  supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full backdrop-blur-sm",
+				{
+					"border-gray-300 border-b": isStuck
+				}
+			)}
+		>
 			<div className="container flex h-16 items-center justify-between">
 				{/* Logo */}
-				<Link to="/" className="pl-35 text-2xl font-bold">
+				<Link to="/" className="pl-35 text-2xl font-bold text-shadow-lg text-shadow-white">
 					X Blog
 				</Link>
 
