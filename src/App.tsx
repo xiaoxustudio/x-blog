@@ -1,5 +1,5 @@
 import { Toaster } from "sonner";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router";
 
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";

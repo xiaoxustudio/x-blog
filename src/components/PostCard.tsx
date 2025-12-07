@@ -1,7 +1,7 @@
 import type { Post } from "@/types";
 import { Badge, Box, Card, Flex, Text } from "@radix-ui/themes";
 import { Calendar, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 interface PostCardProps {
 	post: Post;

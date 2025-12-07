@@ -1,55 +1,6 @@
 import type { Post, TagMetadata } from "@/types";
 
-export const tagsData: TagMetadata[] = [
-	{
-		name: "React",
-		description: "用于构建用户界面的 JavaScript 库",
-		color: "bg-blue-500"
-	},
-	{
-		name: "shadcn/ui",
-		description: "使用 Radix UI 和 Tailwind CSS 构建的组件库",
-		color: "bg-purple-500"
-	},
-	{
-		name: "前端",
-		description: "所有与客户端开发相关的内容",
-		color: "bg-green-500"
-	},
-	{
-		name: "TypeScript",
-		description: "JavaScript 的超集，添加了静态类型",
-		color: "bg-blue-600"
-	},
-	{
-		name: "编程",
-		description: "通用的编程思想和技巧",
-		color: "bg-orange-500"
-	},
-	{ name: "技术", description: "广泛的科技领域探讨", color: "bg-pink-500" },
-	{ name: "Vite", description: "下一代前端构建工具", color: "bg-indigo-500" },
-	{
-		name: "构建工具",
-		description: "用于打包和优化代码的工具",
-		color: "bg-yellow-500"
-	},
-	{ name: "性能", description: "Web 应用性能优化", color: "bg-red-500" },
-	{
-		name: "CSS",
-		description: "层叠样式表，用于网页样式设计",
-		color: "bg-cyan-500"
-	},
-	{
-		name: "Tailwind",
-		description: "实用优先的 CSS 框架",
-		color: "bg-teal-500"
-	},
-	{
-		name: "CSS-in-JS",
-		description: "使用 JavaScript 编写 CSS 的方法",
-		color: "bg-lime-500"
-	}
-];
+export const tagsData: TagMetadata[] = [];
 
 export const postsData: Post[] = [
 	{

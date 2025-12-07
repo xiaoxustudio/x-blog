@@ -1,5 +1,5 @@
 import { BookOpen, FolderOpen, Home, Search, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import useUser from "@/store/user";
 import { TextField } from "@radix-ui/themes";
 

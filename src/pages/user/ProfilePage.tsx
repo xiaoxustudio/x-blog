@@ -4,7 +4,7 @@ import useUser from "@/store/user";
 import Login from "@/apis/user/login";
 import GetInfo from "@/apis/user/info";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { Button } from "@/components/Button";
 import {
 	Avatar,

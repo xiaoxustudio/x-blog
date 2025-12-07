@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import { PostCard } from "@/components/PostCard";
 import { postsData, tagsData } from "@/data/posts";
 import { Button } from "@/components/Button";

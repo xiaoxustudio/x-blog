@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import useUser from "@/store/user";
 import GetInfo from "@/apis/user/info";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import UpdateEdit from "@/apis/user/edit";
 import { Button } from "@/components/Button";
 import { Avatar, Box, Card, Flex, Text, TextField } from "@radix-ui/themes";

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { postsData, tagsData } from "@/data/posts";
 import { Badge, Box, Card, Flex } from "@radix-ui/themes";
 

@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import Editor from "@/components/Editor/";
 import useUser from "@/store/user";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { Button } from "@/components/Button";
 import {
 	Box,
