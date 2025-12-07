@@ -22,7 +22,7 @@ type (
 
 	EditInfoReq struct {
 		g.Meta   `path:"/user/editInfo" method:"POST" summary:"编辑用户信息"`
-		Nickname string `json:"nickname" v:"required|length:3,50#昵称不能为空|昵称长度为3到50位"`
+		Nickname string `json:"nickname" v:"required|length:3,20#昵称不能为空|昵称长度为3到20位"`
 		Email    string `json:"email" v:"required|email#邮箱不能为空|邮箱格式不正确"`
 		Avatar   string `json:"avatar"`
 	}
@@ -30,14 +30,14 @@ type (
 	}
 
 	PublishArticleReq struct {
-		g.Meta     `path:"/user/publishArticle" method:"POST" summary:"发布文章"`
-		Title      string `json:"title" v:"required|length:3,50#标题不能为空|标题长度为3到50位"`
-		Content    string `json:"content" v:"required#内容不能为空"`
-		Excerpt    string `json:"excerpt" v:"required|length:3,50#摘要不能为空|摘要长度为3到50位"`
-		Author     string `json:"author" v:"required|length:3,50#作者不能为空|作者长度为3到50位"`
-		Date       string `json:"date" v:"required#日期不能为空"`
-		CoverImage string `json:"coverImage" v:"required#封面不能为空"`
-		Tags       string `json:"tags" v:"required#标签不能为空"`
+		g.Meta  `path:"/user/publishArticle" method:"POST" summary:"发布文章"`
+		Title   string `json:"title" v:"required|length:3,20#标题不能为空|标题长度为3到20位"`
+		Content string `json:"content" v:"required|length:10,2000#内容不能为空|内容长度为10到2000位"`
+		Excerpt string `json:"excerpt" v:"required|length:3,20#摘要不能为空|摘要长度为3到20位"`
+		Author  string `json:"author" v:"required|length:3,20#作者不能为空|作者长度为3到20位"`
+		// Date       string `json:"date" v:"required#日期不能为空"`
+		CoverImage string `json:"coverImage"`
+		Tags       string `json:"tags" v:"required|min-length:1#标签不能为空|至少需要一个标签"`
 		Featured   bool   `json:"featured" v:"required#特性不能为空"`
 	}
 	PublishArticleRes struct {

@@ -6,11 +6,14 @@ import (
 	"backend/internal/dao"
 	"backend/internal/model/entity"
 	"backend/utility/rtool"
+	"context"
+	"strings"
 	"time"
 
 	jwt "github.com/golang-jwt/jwt/v5"
 
 	"github.com/gogf/gf/v2/crypto/gmd5"
+	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gtime"
@@ -181,6 +184,7 @@ func (u *User) PublishArticle(req *ghttp.Request) {
 		req.Response.WriteJsonExit(rtool.ToReturn(-1, "参数校验失败", err.Maps()))
 		return
 	}
+
 	info := req.Context().Value("userinfo").(map[string]any)
 	username := info["username"].(string)
 	featured := 0
@@ -188,6 +192,27 @@ func (u *User) PublishArticle(req *ghttp.Request) {
 	if data.Featured {
 		featured = 1
 	}
+
+	// 标签事务
+	err := dao.Posts.Ctx(ctx).Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		tags := strings.Split(data.Tags, ",")
+		var err error
+		for i := range tags {
+			tags[i] = strings.TrimSpace(tags[i])
+			// 判断tags是否在数据库中存在，如果不存在则报错
+			var tag entity.Tags
+			err = dao.Tags.Ctx(ctx).Where("id = ?", tags[i]).Scan(&tag)
+			if err != nil {
+				return err
+			}
+		}
+		return err
+	})
+
+	if err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "标签创建识别/创建错误", err.Error()))
+	}
+
 	article := entity.Posts{
 		Title:      data.Title,
 		Content:    data.Content,
@@ -199,10 +224,10 @@ func (u *User) PublishArticle(req *ghttp.Request) {
 		Featured:   featured,
 	}
 
-	_, err := dao.Posts.Ctx(ctx).Insert(article)
-	if err != nil {
-		req.Response.WriteJsonExit(rtool.ToReturn(-1, "发布文章失败", err.Error()))
-	}
+	// _, err = dao.Posts.Ctx(ctx).Insert(article)
+	// if err != nil {
+	// 	req.Response.WriteJsonExit(rtool.ToReturn(-1, "发布文章失败", err.Error()))
+	// }
 
-	req.Response.WriteJsonExit(rtool.ToReturn(0, "发布文章成功", nil))
+	req.Response.WriteJsonExit(rtool.ToReturn(0, "发布文章成功", article))
 }
