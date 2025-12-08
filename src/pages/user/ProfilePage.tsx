@@ -15,21 +15,40 @@ import {
 	Text,
 	TextField
 } from "@radix-ui/themes";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "@/lib/schemas";
+
+interface FormProps {
+	username: string;
+	password: string;
+	email?: string;
+}
 
 export default function ProfilePage() {
 	const [pageMode, setPageMode] = useState<"login" | "register">("login");
 	const isLoginMode = useMemo(() => pageMode === "login", [pageMode]);
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors }
+	} = useForm<FormProps>({
+		resolver: zodResolver(loginSchema),
+		defaultValues: {
+			username: "",
+			password: ""
+		},
+		mode: "onTouched"
+	});
+
 	const [isLoading, setIsLoading] = useState(false);
-	const [username, setUsername] = useState("");
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
 
 	const { token, user, setToken, setUser } = useUser();
 
 	const navigate = useNavigate();
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
+	const onSubmit = ({ username, password, email }: FormProps) => {
 		setIsLoading(true);
 		if (isLoginMode) {
 			// 登录逻辑
@@ -47,6 +66,7 @@ export default function ProfilePage() {
 				});
 		} else {
 			// 注册逻辑
+			console.log(username, password, email);
 		}
 	};
 
@@ -79,20 +99,22 @@ export default function ProfilePage() {
 								: "创建一个新账户以开始使用"}
 						</Text>
 					</Flex>
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleSubmit(onSubmit)}>
 						<Box className="space-y-4">
 							<div className="space-y-2">
 								<label htmlFor="name">用户名</label>
 								<TextField.Root
+									{...register("username")}
 									id="name"
 									type="text"
 									placeholder="用户名"
-									value={username}
-									onChange={(e) =>
-										setUsername(e.target.value)
-									}
 									required
 								/>
+								{errors.username && (
+									<Text color="red" size="1">
+										{errors.username.message}
+									</Text>
+								)}
 							</div>
 
 							{!isLoginMode && (
@@ -102,10 +124,6 @@ export default function ProfilePage() {
 										id="email"
 										type="email"
 										placeholder="m@example.com"
-										value={email}
-										onChange={(e) =>
-											setEmail(e.target.value)
-										}
 										required
 									/>
 								</div>
@@ -113,14 +131,16 @@ export default function ProfilePage() {
 							<div className="space-y-2">
 								<label htmlFor="password">密码</label>
 								<TextField.Root
+									{...register("password")}
 									id="password"
 									type="password"
-									value={password}
-									onChange={(e) =>
-										setPassword(e.target.value)
-									}
 									required
 								/>
+								{errors.password && (
+									<Text color="red" size="1">
+										{errors.password.message}
+									</Text>
+								)}
 							</div>
 						</Box>
 						<Flex direction="column" className="space-y-4">

@@ -1,6 +1,17 @@
 import { z } from "zod";
 import { PostsLimitMap } from "@/lib/consts";
 
+export const loginSchema = z.object({
+	username: z.string().min(1, "用户名是必填项"),
+	password: z.string().min(1, "密码是必填项")
+});
+
+export const registerSchema = z.object({
+	username: z.string().min(1, "用户名是必填项"),
+	password: z.string().min(1, "密码是必填项"),
+	email: z.string().min(1, "邮箱是必填项")
+});
+
 export const articleSchema = z.object({
 	title: z
 		.string()
