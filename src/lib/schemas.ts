@@ -2,14 +2,14 @@ import { z } from "zod";
 import { PostsLimitMap } from "@/lib/consts";
 
 export const loginSchema = z.object({
-	username: z.string().min(1, "用户名是必填项"),
-	password: z.string().min(1, "密码是必填项")
+	username: z.string().min(3, "用户名最小为3位").max(50, "用户名最大为50位"),
+	password: z.string().min(6, "密码最小为6位").max(50, "用户名最大为50位")
 });
 
 export const registerSchema = z.object({
-	username: z.string().min(1, "用户名是必填项"),
-	password: z.string().min(1, "密码是必填项"),
-	email: z.string().min(1, "邮箱是必填项")
+	username: z.string().min(3, "用户名最小为3位").max(50, "用户名最大为50位"),
+	password: z.string().min(6, "密码最小为6位").max(50, "用户名最大为50位"),
+	email: z.email("邮箱格式不正确")
 });
 
 export const articleSchema = z.object({
