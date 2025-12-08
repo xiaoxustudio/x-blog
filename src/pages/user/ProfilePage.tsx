@@ -207,12 +207,19 @@ export default function ProfilePage() {
 					</Flex>
 				</Box>
 				<Flex justify="between">
-					<Button
-						onClick={() => navigate("/edit", { replace: true })}
-					>
-						编辑资料
+					<Flex gap="2">
+						<Button
+							onClick={() => navigate("/edit", { replace: true })}
+						>
+							编辑资料
+						</Button>
+						<Button onClick={() => navigate("/myposts")}>
+							我的文章
+						</Button>
+					</Flex>
+					<Button mode="primary" onClick={() => setToken("")}>
+						退出登录
 					</Button>
-					<Button onClick={() => setToken("")}>退出登录</Button>
 				</Flex>
 			</Card>
 		</div>

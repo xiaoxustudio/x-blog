@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from "react";
 import { toast, Toaster } from "sonner";
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 
@@ -14,8 +15,8 @@ import ProfilePage from "./pages/user/ProfilePage";
 import ProfileEditPage from "./pages/user/EditePage";
 import ArticlePublishPage from "./pages/publish";
 import GetPosts from "./apis/common/posts";
-import { useEffect, useMemo } from "react";
 import usePostsStore from "./store/posts";
+import MyArticles from "./pages/user/MyArticles";
 
 function App() {
 	const { setPosts, posts } = usePostsStore();
@@ -99,6 +100,7 @@ function App() {
 
 						<Route path="/profile" element={<ProfilePage />} />
 						<Route path="/edit" element={<ProfileEditPage />} />
+						<Route path="/myposts" element={<MyArticles />} />
 
 						<Route
 							path="/articles/:id"

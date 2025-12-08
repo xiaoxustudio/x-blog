@@ -1,8 +1,8 @@
-import { useParams, Link } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import Editor from "@/components/Editor";
 import { Button } from "@/components/Button";
-import { Badge } from "@radix-ui/themes";
+import { Badge, Box } from "@radix-ui/themes";
 import { useEffect } from "react";
 import GetPosts from "@/apis/common/posts";
 import { toast } from "sonner";
@@ -10,6 +10,7 @@ import usePostsStore from "@/store/posts";
 
 function ArticleDetailPage() {
 	const { id } = useParams<{ id: string }>();
+	const navigate = useNavigate();
 	const { setPosts, posts } = usePostsStore();
 
 	const post = posts.find((p) => p.id === Number(id));
@@ -31,21 +32,25 @@ function ArticleDetailPage() {
 				<p className="text-muted-foreground mb-8">
 					抱歉，您访问的文章不存在。
 				</p>
-				<Link to="/articles">
-					<Button mode="clear">返回文章列表</Button>
-				</Link>
+				<Button mode="clear" onClick={() => navigate(-1)}>
+					返回文章列表
+				</Button>
 			</div>
 		);
 	}
 
 	return (
 		<div className="container mx-auto max-w-4xl px-4 py-12">
-			<Link to="/articles" className="sticky top-25 z-50 -ml-40 block">
-				<Button mode="clear" className="mb-6">
+			<Box className="sticky top-25 z-50 -ml-40 block">
+				<Button
+					mode="clear"
+					className="mb-6"
+					onClick={() => navigate(-1)}
+				>
 					<ArrowLeft className="mr-2 h-4 w-4" />
 					返回文章列表
 				</Button>
-			</Link>
+			</Box>
 
 			<article>
 				<header className="mb-8">
