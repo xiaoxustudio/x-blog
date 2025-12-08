@@ -13,7 +13,6 @@ export default function ProfilePage() {
 
 	useEffect(() => {
 		if (!token || !user) {
-			// 需要登录
 			navigate("/login", { replace: true });
 		} else if (token) {
 			GetInfo().then(({ data }) => {
@@ -42,7 +41,11 @@ export default function ProfilePage() {
 	});
 
 	return (
-		<div className="bg-background flex min-h-screen items-center justify-center">
+		<Flex
+			align="center"
+			justify="center"
+			className="bg-background min-h-screen"
+		>
 			<Card className="w-full max-w-md">
 				<Flex direction="row" align="center" className="space-y-0 pb-4">
 					<Avatar
@@ -85,11 +88,17 @@ export default function ProfilePage() {
 							我的文章
 						</Button>
 					</Flex>
-					<Button mode="primary" onClick={() => setToken("")}>
+					<Button
+						mode="primary"
+						onClick={() => {
+							setToken("");
+							navigate("/login", { replace: true });
+						}}
+					>
 						退出登录
 					</Button>
 				</Flex>
 			</Card>
-		</div>
+		</Flex>
 	);
 }
