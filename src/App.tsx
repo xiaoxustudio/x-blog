@@ -14,30 +14,30 @@ import ProfilePage from "./pages/user/ProfilePage";
 import ProfileEditPage from "./pages/user/EditePage";
 import ArticlePublishPage from "./pages/publish";
 import GetPosts from "./apis/common/posts";
-import type { Post } from "./types";
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import usePostsStore from "./store/posts";
 
 function App() {
-	const [postsData, setPostsData] = useState<Post[]>([]);
+	const { setPosts, posts } = usePostsStore();
 	const featuredPosts = useMemo(
-		() => postsData.filter((post) => post.featured),
-		[postsData]
+		() => posts.filter((post) => post.featured),
+		[posts]
 	);
 	const regularPosts = useMemo(
-		() => postsData.filter((post) => !post.featured),
-		[postsData]
+		() => posts.filter((post) => !post.featured),
+		[posts]
 	);
 
 	useEffect(() => {
 		GetPosts().then(({ data }) => {
 			if (~data.code) {
-				console.log(data.data);
-				setPostsData(data.data);
+				setPosts(data.data);
 			} else {
 				toast.error(data.msg);
 			}
 		});
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+
 	return (
 		<Router>
 			<div className="bg-background min-h-screen">

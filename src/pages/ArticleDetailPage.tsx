@@ -3,26 +3,26 @@ import { ArrowLeft, Calendar, User } from "lucide-react";
 import Editor from "@/components/Editor";
 import { Button } from "@/components/Button";
 import { Badge } from "@radix-ui/themes";
-import type { Post } from "@/types";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import GetPosts from "@/apis/common/posts";
 import { toast } from "sonner";
+import usePostsStore from "@/store/posts";
 
 function ArticleDetailPage() {
 	const { id } = useParams<{ id: string }>();
-	const [postsData, setPostsData] = useState<Post[]>([]);
+	const { setPosts, posts } = usePostsStore();
 
-	const post = postsData.find((p) => p.id === Number(id));
+	const post = posts.find((p) => p.id === Number(id));
 
 	useEffect(() => {
 		GetPosts().then(({ data }) => {
 			if (~data.code) {
-				setPostsData(data.data);
+				setPosts(data.data);
 			} else {
 				toast.error(data.msg);
 			}
 		});
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	if (!post) {
 		return (

@@ -1,24 +1,24 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Link } from "react-router";
 import { Badge, Box, Card, Flex } from "@radix-ui/themes";
 import GetTags from "@/apis/common/tags";
-import type { Post } from "@/types";
 import GetPosts from "@/apis/common/posts";
 import { toast } from "sonner";
 import useTagsStore from "@/store/tags";
+import usePostsStore from "@/store/posts";
 
 function CategoriesPage() {
 	const { setTags, tags } = useTagsStore();
-	const [postsData, setPostsData] = useState<Post[]>([]);
+	const { setPosts, posts } = usePostsStore();
 	const tagCounts = useMemo(() => {
 		const counts: { [key: string]: number } = {};
-		postsData.forEach((post) => {
+		posts.forEach((post) => {
 			post.tags.split(",").forEach((tag) => {
 				counts[tag] = (counts[tag] || 0) + 1;
 			});
 		});
 		return counts;
-	}, [postsData]);
+	}, [posts]);
 
 	const getTagSize = (count: number) => {
 		const sizes = [
@@ -39,7 +39,7 @@ function CategoriesPage() {
 		});
 		GetPosts().then(({ data }) => {
 			if (~data.code) {
-				setPostsData(data.data);
+				setPosts(data.data);
 			} else {
 				toast.error(data.msg);
 			}

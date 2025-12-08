@@ -2,15 +2,15 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { PostCard } from "@/components/PostCard";
 import { Button } from "@/components/Button";
-import type { Post } from "@/types";
 import GetTags from "@/apis/common/tags";
 import GetPosts from "@/apis/common/posts";
 import { toast } from "sonner";
 import useTagsStore from "@/store/tags";
+import usePostsStore from "@/store/posts";
 
 function ArticlesPage() {
 	const { setTags, tags } = useTagsStore();
-	const [postsData, setPostsData] = useState<Post[]>([]);
+	const { setPosts, posts } = usePostsStore();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const initialTag = searchParams.get("tag");
 	const [selectedTag, setSelectedTag] = useState<string | null>(initialTag);
@@ -18,10 +18,10 @@ function ArticlesPage() {
 
 	const filteredPosts = useMemo(() => {
 		if (!selectedTag) {
-			return postsData;
+			return posts;
 		}
-		return postsData.filter((post) => post.tags.includes(selectedTag));
-	}, [postsData, selectedTag]);
+		return posts.filter((post) => post.tags.includes(selectedTag));
+	}, [posts, selectedTag]);
 
 	const handleTagClick = (tag: string | null) => {
 		setSelectedTag(tag);
@@ -41,7 +41,7 @@ function ArticlesPage() {
 		});
 		GetPosts().then(({ data }) => {
 			if (~data.code) {
-				setPostsData(data.data);
+				setPosts(data.data);
 			} else {
 				toast.error(data.msg);
 			}
