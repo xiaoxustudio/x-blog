@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router";
 import { Button } from "./Button";
+import useUser from "@/store/user";
 
 export function Hero() {
 	const navigate = useNavigate();
+	const { token, user } = useUser();
 	return (
 		<section className="py-20 text-center md:py-32">
 			<div className="container mx-auto px-4">
@@ -21,9 +23,11 @@ export function Hero() {
 					>
 						浏览文章
 					</Button>
-					<Button onClick={() => navigate("/myposts")}>
-						我的文章
-					</Button>
+					{user && token && (
+						<Button onClick={() => navigate("/myposts")}>
+							我的文章
+						</Button>
+					)}
 				</div>
 			</div>
 		</section>

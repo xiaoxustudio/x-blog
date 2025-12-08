@@ -12,6 +12,8 @@ import ProfileEditPage from "./pages/user/EditePage";
 import ArticlePublishPage from "./pages/publish";
 import MyArticles from "./pages/user/MyArticles";
 import HomeList from "./components/HomeList";
+import TheLogin from "./pages/user/TheLogin";
+import TheRegister from "./pages/user/TheRegister";
 
 function App() {
 	return (
@@ -33,6 +35,8 @@ function App() {
 							element={<CategoriesPage />}
 						/>
 
+						<Route path="/login" element={<TheLogin />} />
+						<Route path="/register" element={<TheRegister />} />
 						<Route path="/profile" element={<ProfilePage />} />
 						<Route path="/edit" element={<ProfileEditPage />} />
 						<Route path="/myposts" element={<MyArticles />} />

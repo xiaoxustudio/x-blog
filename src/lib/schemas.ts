@@ -9,7 +9,7 @@ export const loginSchema = z.object({
 export const registerSchema = z.object({
 	username: z.string().min(3, "用户名最小为3位").max(50, "用户名最大为50位"),
 	password: z.string().min(6, "密码最小为6位").max(50, "用户名最大为50位"),
-	email: z.email("邮箱格式不正确")
+	email: z.string()
 });
 
 export const articleSchema = z.object({

@@ -1,77 +1,21 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 import useUser from "@/store/user";
-import Login from "@/apis/user/login";
 import GetInfo from "@/apis/user/info";
-import { toast } from "sonner";
-import { useNavigate } from "react-router";
 import { Button } from "@/components/Button";
-import {
-	Avatar,
-	Box,
-	Card,
-	Flex,
-	Heading,
-	Text,
-	TextField
-} from "@radix-ui/themes";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "@/lib/schemas";
-
-interface FormProps {
-	username: string;
-	password: string;
-	email?: string;
-}
+import { Avatar, Box, Card, Flex, Text } from "@radix-ui/themes";
+import { useNavigate } from "react-router";
 
 export default function ProfilePage() {
-	const [pageMode, setPageMode] = useState<"login" | "register">("login");
-	const isLoginMode = useMemo(() => pageMode === "login", [pageMode]);
-
-	const {
-		register,
-		handleSubmit,
-		formState: { errors }
-	} = useForm<FormProps>({
-		resolver: zodResolver(loginSchema),
-		defaultValues: {
-			username: "",
-			password: ""
-		},
-		mode: "onTouched"
-	});
-
-	const [isLoading, setIsLoading] = useState(false);
-
+	const navigate = useNavigate();
 	const { token, user, setToken, setUser } = useUser();
 
-	const navigate = useNavigate();
-
-	const onSubmit = ({ username, password, email }: FormProps) => {
-		setIsLoading(true);
-		if (isLoginMode) {
-			// 登录逻辑
-			Login({ username, password })
-				.then(({ data }) => {
-					if (~data.code) {
-						setToken(data.data);
-						toast.success(data.msg);
-					} else {
-						toast.error(data.msg);
-					}
-				})
-				.finally(() => {
-					setIsLoading(false);
-				});
-		} else {
-			// 注册逻辑
-			console.log(username, password, email);
-		}
-	};
-
 	useEffect(() => {
-		if (token) {
+		if (!token || !user) {
+			// 需要登录
+			navigate("/login", { replace: true });
+		} else if (token) {
 			GetInfo().then(({ data }) => {
 				if (~data.code) {
 					setUser(data.data);
@@ -82,103 +26,7 @@ export default function ProfilePage() {
 			});
 		}
 	}, []); // eslint-disable-line
-
-	if (!token || !user) {
-		return (
-			<Flex
-				align="center"
-				justify="center"
-				className="bg-background min-h-screen"
-			>
-				<Card className="w-full max-w-md">
-					<Flex gap="2" direction="column">
-						<Heading>{isLoginMode ? "登录" : "注册"}</Heading>
-						<Text as="p" size="2">
-							{isLoginMode
-								? "输入您的邮箱以登录您的账户"
-								: "创建一个新账户以开始使用"}
-						</Text>
-					</Flex>
-					<form onSubmit={handleSubmit(onSubmit)}>
-						<Box className="space-y-4">
-							<div className="space-y-2">
-								<label htmlFor="name">用户名</label>
-								<TextField.Root
-									{...register("username")}
-									id="name"
-									type="text"
-									placeholder="用户名"
-									required
-								/>
-								{errors.username && (
-									<Text color="red" size="1">
-										{errors.username.message}
-									</Text>
-								)}
-							</div>
-
-							{!isLoginMode && (
-								<div className="space-y-2">
-									<label htmlFor="email">邮箱</label>
-									<TextField.Root
-										id="email"
-										type="email"
-										placeholder="m@example.com"
-										required
-									/>
-								</div>
-							)}
-							<div className="space-y-2">
-								<label htmlFor="password">密码</label>
-								<TextField.Root
-									{...register("password")}
-									id="password"
-									type="password"
-									required
-								/>
-								{errors.password && (
-									<Text color="red" size="1">
-										{errors.password.message}
-									</Text>
-								)}
-							</div>
-						</Box>
-						<Flex direction="column" className="space-y-4">
-							<Button
-								type="submit"
-								mode="primary"
-								className="w-full"
-								disabled={isLoading}
-							>
-								{isLoading
-									? "处理中..."
-									: isLoginMode
-										? "登录"
-										: "注册"}
-							</Button>
-							<Flex
-								gap="2"
-								align="center"
-								justify="between"
-								className="text-sm"
-							>
-								{isLoginMode ? "还没有账户？" : "已有账户？"}
-								<Button
-									onClick={() =>
-										setPageMode(
-											isLoginMode ? "register" : "login"
-										)
-									}
-								>
-									{!isLoginMode ? "立即登录" : "立即注册"}
-								</Button>
-							</Flex>
-						</Flex>
-					</form>
-				</Card>
-			</Flex>
-		);
-	}
+	if (!token || !user) return;
 
 	const avatarFallback = user.nickname
 		? user.nickname.charAt(0).toUpperCase()
