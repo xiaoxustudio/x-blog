@@ -61,6 +61,7 @@ var (
 					group.GET("/info", controller.Info)
 					group.POST("/edit", controller.EditInfo)
 					group.POST("/publish", controller.PublishArticle)
+					group.POST("/publish_posts", controller.GetPublishPosts)
 				})
 			})
 			s.Run()

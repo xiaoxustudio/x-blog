@@ -231,3 +231,15 @@ func (u *User) PublishArticle(req *ghttp.Request) {
 
 	req.Response.WriteJsonExit(rtool.ToReturn(0, "发布文章成功", article))
 }
+
+func (u *User) GetPublishPosts(req *ghttp.Request) {
+	ctx := req.Context()
+	info := req.Context().Value("userinfo").(map[string]any)
+	username := info["username"].(string)
+	var data []entity.Posts
+	err := dao.Posts.Ctx(ctx).Where("author = ?", username).Scan(&data)
+	if err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "获取我的文章失败", err.Error()))
+	}
+	req.Response.WriteJsonExit(rtool.ToReturn(0, "获取我的文章成功", data))
+}
