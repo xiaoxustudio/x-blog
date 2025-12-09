@@ -35,6 +35,7 @@ export function Get<T = RepsonseData, D = any>(
 		if (status === 401) {
 			useUser.getState().setToken("");
 			toast.error(data.msg);
+			window.location.href = "/login";
 		}
 		return error;
 	});
