@@ -1,7 +1,7 @@
 import { BookOpen, FolderOpen, Home, Search, User } from "lucide-react";
 import { Link } from "react-router";
 import useUser from "@/store/user";
-import { TextField } from "@radix-ui/themes";
+import { Flex, Text, TextField } from "@radix-ui/themes";
 import { useStickyScroll } from "@/hooks/useStickyScroll";
 import { cn } from "@/lib/utils";
 
@@ -20,8 +20,22 @@ export function Header() {
 		>
 			<div className="container flex h-16 items-center justify-between">
 				{/* Logo */}
-				<Link to="/" className="pl-35 text-2xl font-bold text-shadow-lg text-shadow-white">
-					X Blog
+				<Link
+					to="/"
+					className="pl-35 text-2xl font-bold text-shadow-lg text-shadow-white"
+				>
+					<Flex align="center" className="group">
+						<img src="/x.png" width={100} className="z-10" />
+						<Text className=" opacity-0 transition-all duration-500 z-0 transform-[translateX(-120%)] group-hover:transform-[translateX(0%)] group-hover:opacity-100 ">
+							X Blog
+						</Text>
+						<Text
+							size="1"
+							className="opacity-0 transition-all duration-800 z-0 transform-[translateX(100%)] group-hover:transform-[translateX(0%)] group-hover:opacity-100 "
+						>
+							xuran's
+						</Text>
+					</Flex>
 				</Link>
 
 				{/* Desktop Navigation */}
