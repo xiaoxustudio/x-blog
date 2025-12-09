@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import GetPublishPosts from "@/apis/user/publish_posts";
-import type { Post } from "@/types";
+import type { Post, RepsonseData } from "@/types";
 import { toast } from "sonner";
-import { Badge, Flex, Heading, Text } from "@radix-ui/themes";
+import { Badge, Flex, Grid, Heading, Text } from "@radix-ui/themes";
 import { PostCard } from "@/components/PostCard";
 
 function MyArticles() {
 	const [postsData, setPostsData] = useState<Post[]>([]);
-
-	useEffect(() => {
+	const updatePostsData = async () => {
 		GetPublishPosts().then(({ data }) => {
 			if (~data.code) {
 				setPostsData(data.data);
@@ -16,16 +15,35 @@ function MyArticles() {
 				toast.error(data.msg);
 			}
 		});
+	};
+
+	const handleOperate = ({ code, msg }: RepsonseData) => {
+		if (~code) {
+			toast.success(msg);
+		} else {
+			toast.error(msg);
+		}
+		updatePostsData();
+	};
+
+	useEffect(() => {
+		updatePostsData();
 	}, []);
 
 	return (
 		<Flex direction="column" gap="5" className="p-5">
 			<Heading>我的文章</Heading>
-			<Flex gap="9">
+			<Grid columns="3" gap="9">
 				{postsData.map((post) => (
-					<PostCard key={post.id} post={post} context />
+					<PostCard
+						key={post.id}
+						post={post}
+						context
+						onSuccess={handleOperate}
+						onError={handleOperate}
+					/>
 				))}
-			</Flex>
+			</Grid>
 			<Text>
 				<Badge>总共：{postsData.length} 篇文章</Badge>
 			</Text>

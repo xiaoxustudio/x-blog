@@ -1,50 +1,103 @@
-import type { Post } from "@/types";
+import type { Post, RepsonseData } from "@/types";
+import type { PropsWithChildren } from "react";
 import { Badge, Box, Card, ContextMenu, Flex, Text } from "@radix-ui/themes";
 import { Calendar, User } from "lucide-react";
-import type { PropsWithChildren } from "react";
 import { Link } from "react-router";
+import DeletePost from "@/apis/post/delete";
+import DuplicatePost from "@/apis/post/duplicate";
 
 interface PostCardProps {
 	post: Post;
 	context?: boolean;
+	onSuccess?: (data: RepsonseData) => void;
+	onError?: (data: RepsonseData) => void;
 }
 
 interface ParentComponentProps extends PropsWithChildren {
 	context: boolean;
 	post: Post;
+	onSuccess?: (data: RepsonseData) => void;
+	onError?: (data: RepsonseData) => void;
 }
 
-const ParentComponent = ({ children, context, post }: ParentComponentProps) => (
-	<>
-		{context ? (
-			<ContextMenu.Root>
-				<ContextMenu.Trigger>{children}</ContextMenu.Trigger>
-				<ContextMenu.Content>
-					<ContextMenu.Item disabled>
-						<Text>ID:{post.id}</Text>
-						<Text
-							className="w-16 text-ellipsis text-nowrap overflow-hidden"
-							size="1"
-						>
-							{post.title}
-						</Text>
-					</ContextMenu.Item>
-					<ContextMenu.Item shortcut="⌘ D">副本</ContextMenu.Item>
-					<ContextMenu.Separator />
-					<ContextMenu.Item shortcut="⌘ ⌫" color="red">
-						删除
-					</ContextMenu.Item>
-				</ContextMenu.Content>
-			</ContextMenu.Root>
-		) : (
-			children
-		)}
-	</>
-);
+const ParentComponent = ({
+	children,
+	context,
+	post,
+	onError,
+	onSuccess
+}: ParentComponentProps) => {
+	const handleDelete = () => {
+		DeletePost({ id: post.id }).then(({ data }) => {
+			if (~data.code) {
+				onSuccess?.(data);
+			} else {
+				onError?.(data);
+			}
+		});
+	};
 
-export function PostCard({ post, context = false }: PostCardProps) {
+	const handleDuplicate = () => {
+		DuplicatePost({ id: post.id }).then(({ data }) => {
+			if (~data.code) {
+				onSuccess?.(data);
+			} else {
+				onError?.(data);
+			}
+		});
+	};
+
 	return (
-		<ParentComponent context={context} post={post}>
+		<>
+			{context ? (
+				<ContextMenu.Root>
+					<ContextMenu.Trigger>{children}</ContextMenu.Trigger>
+					<ContextMenu.Content>
+						<ContextMenu.Item disabled>
+							<Text>ID:{post.id}</Text>
+							<Text
+								className="w-16 text-ellipsis text-nowrap overflow-hidden"
+								size="1"
+							>
+								{post.title}
+							</Text>
+						</ContextMenu.Item>
+						<ContextMenu.Item
+							shortcut="⌘ D"
+							onClick={handleDuplicate}
+						>
+							副本
+						</ContextMenu.Item>
+						<ContextMenu.Separator />
+						<ContextMenu.Item
+							shortcut="⌘ ⌫"
+							color="red"
+							onClick={handleDelete}
+						>
+							删除
+						</ContextMenu.Item>
+					</ContextMenu.Content>
+				</ContextMenu.Root>
+			) : (
+				children
+			)}
+		</>
+	);
+};
+
+export function PostCard({
+	post,
+	context = false,
+	onError,
+	onSuccess
+}: PostCardProps) {
+	return (
+		<ParentComponent
+			context={context}
+			post={post}
+			onError={onError}
+			onSuccess={onSuccess}
+		>
 			<Link to={`/articles/${post.id}`}>
 				<Card className="cursor-pointer overflow-hidden transition-shadow hover:shadow-lg">
 					<Box className="group relative m-2">

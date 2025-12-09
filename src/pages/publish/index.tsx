@@ -40,6 +40,7 @@ export default function ArticlePublishPage() {
 
 	const {
 		register,
+		reset,
 		handleSubmit,
 		control,
 		setValue,
@@ -91,6 +92,7 @@ export default function ArticlePublishPage() {
 				// 假设 0 表示成功
 				toast.error(data.msg);
 			} else {
+				reset();
 				toast.success("文章发布成功！");
 			}
 		});

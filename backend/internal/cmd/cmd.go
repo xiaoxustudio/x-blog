@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"backend/internal/controller/common"
+	"backend/internal/controller/post"
 	"backend/internal/controller/user"
 	"backend/internal/middleware"
 	"context"
@@ -56,6 +57,12 @@ var (
 					group.POST("/edit", controller.EditInfo)
 					group.POST("/publish", controller.PublishArticle)
 					group.POST("/publish_posts", controller.GetPublishPosts)
+				})
+				group.Group("/post", func(group *ghttp.RouterGroup) {
+					group.Middleware(middleware.Auth)
+					controller := post.New()
+					group.POST("/delete", controller.Delete)
+					group.POST("/duplicate", controller.Duplicate)
 				})
 			})
 			s.Run()
