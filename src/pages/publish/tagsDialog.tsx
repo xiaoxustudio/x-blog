@@ -25,8 +25,6 @@ function TagsDialog({ trigger, tags, selectData, onChange }: TagsDialogProps) {
 				<ScrollArea style={{ height: "300px" }}>
 					<Flex direction="column" gap="3">
 						{
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-expect-error
 							<CheckboxCards.Root
 								defaultValue={selectData}
 								columns="3"
