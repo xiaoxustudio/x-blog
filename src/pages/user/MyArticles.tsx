@@ -23,7 +23,7 @@ function MyArticles() {
 			<Heading>我的文章</Heading>
 			<Flex gap="9">
 				{postsData.map((post) => (
-					<PostCard key={post.id} post={post} />
+					<PostCard key={post.id} post={post} context />
 				))}
 			</Flex>
 			<Text>
