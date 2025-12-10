@@ -107,6 +107,9 @@ func (*Post) Search(req *ghttp.Request) {
 	if err != nil {
 		req.Response.WriteJsonExit(rtool.ToReturn(-1, "文章不存在", err.Error()))
 	}
+	if len(post) == 0 {
+		req.Response.WriteJsonExit(rtool.ToReturn(0, "搜索文章成功", []interface{}{}))
+	}
 
 	req.Response.WriteJsonExit(rtool.ToReturn(0, "搜索文章成功", post))
 }
