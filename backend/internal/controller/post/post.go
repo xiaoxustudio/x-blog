@@ -5,6 +5,7 @@ import (
 	"backend/internal/dao"
 	"backend/internal/model/entity"
 	"backend/utility/rtool"
+	"fmt"
 	"time"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -85,4 +86,27 @@ func (*Post) Duplicate(req *ghttp.Request) {
 	}
 
 	req.Response.WriteJsonExit(rtool.ToReturn(0, "复制文章成功", nil))
+}
+
+func (*Post) Search(req *ghttp.Request) {
+	ctx := req.Context()
+
+	var data v1.PostSearchReq
+	if err := req.Parse(&data); err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "请求体格式错误", err.Error()))
+		return
+	}
+	if err := g.Validator().Data(&data).Run(ctx); err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "参数校验失败", err.Maps()))
+		return
+	}
+
+	md := dao.Posts.Ctx(req.Context())
+	var post []entity.Posts
+	err := md.Clone().WhereLike("title", fmt.Sprintf("%%%s%%", data.Kw)).With(entity.Posts{}).Scan(&post)
+	if err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "文章不存在", err.Error()))
+	}
+
+	req.Response.WriteJsonExit(rtool.ToReturn(0, "搜索文章成功", post))
 }

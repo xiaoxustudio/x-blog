@@ -37,6 +37,11 @@ var (
 				group.Middleware(Middleware)
 
 				// 不需要认证的路由
+				group.Group("/post", func(group *ghttp.RouterGroup) {
+					controller := post.New()
+					group.POST("/search", controller.Search)
+				})
+
 				group.Group("/user", func(group *ghttp.RouterGroup) {
 					controller := user.New()
 					group.POST("/register", controller.Register)

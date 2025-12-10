@@ -11,4 +11,8 @@ type (
 		g.Meta `path:"/post/duplicate" method:"POST" summary:"复制文章"`
 		ID     string `json:"id" v:"required#ID不能为空"`
 	}
+	PostSearchReq struct {
+		g.Meta `path:"/post/search" method:"POST" summary:"搜索文章"`
+		Kw     string `json:"kw" v:"required#关键字不能为空"`
+	}
 )
