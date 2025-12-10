@@ -1,9 +1,10 @@
-import { BookOpen, FolderOpen, Home, Search, User } from "lucide-react";
+import { BookOpen, FolderOpen, Home, User } from "lucide-react";
 import { Link } from "react-router";
 import useUser from "@/store/user";
-import { Flex, Text, TextField } from "@radix-ui/themes";
+import { Flex, Text } from "@radix-ui/themes";
 import { useStickyScroll } from "@/hooks/useStickyScroll";
 import { cn } from "@/lib/utils";
+import SearchInput from "./Search";
 
 export function Header() {
 	const { token } = useUser();
@@ -26,12 +27,12 @@ export function Header() {
 				>
 					<Flex align="center" className="group">
 						<img src="/x.png" width={100} className="z-10" />
-						<Text className=" opacity-0 transition-all duration-500 z-0 transform-[translateX(-120%)] group-hover:transform-[translateX(0%)] group-hover:opacity-100 ">
+						<Text className="text-nowrap text-ellipsis overflow-hidden opacity-0 transition-all duration-500 z-0 transform-[translateX(-120%)] group-hover:transform-[translateX(0%)] group-hover:opacity-100 ">
 							X Blog
 						</Text>
 						<Text
 							size="1"
-							className="opacity-0 transition-all duration-800 z-0 transform-[translateX(100%)] group-hover:transform-[translateX(0%)] group-hover:opacity-100 "
+							className="text-nowrap text-ellipsis overflow-hidden opacity-0 transition-all duration-800 z-0 transform-[translateX(100%)] group-hover:transform-[translateX(0%)] group-hover:opacity-100 "
 						>
 							xuran's
 						</Text>
@@ -70,16 +71,7 @@ export function Header() {
 
 				{/* Search Bar */}
 				<div className="hidden items-center space-x-2 md:flex">
-					<div className="relative">
-						<TextField.Root
-							placeholder="搜索文章..."
-							className="w-64 pl-8"
-						>
-							<TextField.Slot>
-								<Search className="text-muted-foreground h-4 w-4" />
-							</TextField.Slot>
-						</TextField.Root>
-					</div>
+					<SearchInput />
 				</div>
 
 				{token && (
