@@ -1,5 +1,5 @@
 import type { Post, RepsonseData } from "@/types";
-import type { PropsWithChildren } from "react";
+import { useState, type PropsWithChildren } from "react";
 import { Badge, Box, Card, ContextMenu, Flex, Text } from "@radix-ui/themes";
 import { Calendar, User } from "lucide-react";
 import { Link } from "react-router";
@@ -91,6 +91,7 @@ export function PostCard({
 	onError,
 	onSuccess
 }: PostCardProps) {
+	const [errorImg, setErrorImg] = useState(true);
 	return (
 		<ParentComponent
 			context={context}
@@ -101,11 +102,23 @@ export function PostCard({
 			<Link to={`/articles/${post.id}`}>
 				<Card className="cursor-pointer overflow-hidden transition-shadow hover:shadow-lg">
 					<Box className="group relative m-2">
-						<img
-							src={post.coverImage}
-							alt={post.title}
-							className="mb-2 h-45 w-full rounded-md object-cover"
-						/>
+						{errorImg && (
+							<img
+								src={post.coverImage}
+								alt={post.title}
+								className=" mb-2 h-45  w-full rounded-md object-cover"
+								onError={() => setErrorImg(false)}
+							/>
+						)}
+						{!errorImg && (
+							<Flex
+								align="center"
+								justify="center"
+								className="mb-2 h-45 w-full rounded-md"
+							>
+								无封面
+							</Flex>
+						)}
 						<Text
 							size="4"
 							as="div"
