@@ -9,11 +9,17 @@ import SearchInput from "./Search";
 export function Header() {
 	const { token } = useUser();
 	const { isStuck } = useStickyScroll();
+	const textEllipsis = cn(
+		"text-ellipsis overflow-hidden text-nowrap",
+		"hover:text-primary text-sm font-medium transition-colors",
+		"hover:border-gray-500 hover:border-b-2 border-dashed",
+		"border-b-2 border-b-transparent"
+	);
 
 	return (
 		<header
 			className={cn(
-				"bg-background/95  supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full backdrop-blur-sm",
+				"bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full backdrop-blur-sm",
 				{
 					"border-gray-300 border-b": isStuck
 				}
@@ -41,30 +47,18 @@ export function Header() {
 
 				{/* Desktop Navigation */}
 				<nav className="hidden items-center space-x-6 md:flex">
-					<Link
-						to="/"
-						className="hover:text-primary text-sm font-medium transition-colors"
-					>
+					<Link to="/" className={textEllipsis}>
 						<Home className="mr-1 inline h-4 w-4" />
 						首页
 					</Link>
-					<Link
-						to="/categories"
-						className="hover:text-primary text-sm font-medium transition-colors"
-					>
+					<Link to="/categories" className={textEllipsis}>
 						<FolderOpen className="mr-1 inline h-4 w-4" />
 						分类
 					</Link>
-					<Link
-						to="/articles"
-						className="hover:text-primary flex items-center text-sm font-medium transition-colors"
-					>
+					<Link to="/articles" className={textEllipsis}>
 						<BookOpen className="mr-1 inline h-4 w-4" /> 文章
 					</Link>
-					<Link
-						to="/profile"
-						className="hover:text-primary flex items-center text-sm font-medium transition-colors"
-					>
+					<Link to="/profile" className={textEllipsis}>
 						<User className="mr-1 inline h-4 w-4" /> 我的
 					</Link>
 				</nav>
