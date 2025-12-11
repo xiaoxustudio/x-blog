@@ -18,6 +18,7 @@ export const Button = ({
 		"duration-400!",
 		"ease-in-out!",
 		"cursor-pointer!",
+		"active:scale-95!",
 		"my-2!",
 		{
 			/* default */

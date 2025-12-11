@@ -14,6 +14,8 @@ import MyArticles from "./pages/user/MyArticles";
 import HomeList from "./components/HomeList";
 import TheLogin from "./pages/user/TheLogin";
 import TheRegister from "./pages/user/TheRegister";
+import { ArrowUp } from "lucide-react";
+import { Flex } from "@radix-ui/themes";
 
 function App() {
 	return (
@@ -48,6 +50,20 @@ function App() {
 					</Routes>
 				</main>
 				<Footer />
+				{/* 返回顶部 */}
+				<Flex
+					align="center"
+					justify="center"
+					className="fixed select-none right-4 bottom-8 rounded-md border size-10 bg-white active:scale-50 hover:bg-gray-100 transition-all duration-500 cursor-pointer"
+					onClick={() => {
+						window.scrollTo({
+							top: 0,
+							behavior: "smooth"
+						});
+					}}
+				>
+					<ArrowUp />
+				</Flex>
 				<Toaster />
 			</div>
 		</Router>
