@@ -36,7 +36,7 @@ function HomeList() {
 						精选文章
 					</h2>
 					<div className="grid gap-8">
-						{featuredPosts.map((post) => (
+						{featuredPosts.slice(0, 3).map((post) => (
 							<FeaturedPost key={post.id} post={post} />
 						))}
 					</div>
@@ -49,7 +49,7 @@ function HomeList() {
 						最新文章
 					</h2>
 					<div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-						{regularPosts.slice(0, 3).map((post) => (
+						{regularPosts.slice(0, 16).map((post) => (
 							<PostCard key={post.id} post={post} />
 						))}
 					</div>

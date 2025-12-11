@@ -1,10 +1,11 @@
 import type { Post, RepsonseData } from "@/types";
-import { useState, type PropsWithChildren } from "react";
+import { useEffect, useRef, useState, type PropsWithChildren } from "react";
 import { Badge, Box, Card, ContextMenu, Flex, Text } from "@radix-ui/themes";
 import { Calendar, User } from "lucide-react";
 import { Link } from "react-router";
 import DeletePost from "@/apis/post/delete";
 import DuplicatePost from "@/apis/post/duplicate";
+import styles from "./PostCard.module.css";
 
 interface PostCardProps {
 	post: Post;
@@ -91,7 +92,24 @@ export function PostCard({
 	onError,
 	onSuccess
 }: PostCardProps) {
+	const selfDom = useRef<HTMLAnchorElement | null>(null);
+	const observer = useRef<IntersectionObserver>(null);
 	const [errorImg, setErrorImg] = useState(true);
+
+	useEffect(() => {
+		observer.current = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				const dom = entry.target.firstChild! as HTMLDivElement;
+				const classString = styles["animated-fade-in"];
+				if (entry.isIntersecting && dom?.classList) {
+					dom.classList.add(classString);
+				} else {
+					dom.classList.remove(classString);
+				}
+			});
+		});
+		observer.current.observe(selfDom.current!);
+	}, []);
 	return (
 		<ParentComponent
 			context={context}
@@ -99,7 +117,11 @@ export function PostCard({
 			onError={onError}
 			onSuccess={onSuccess}
 		>
-			<Link to={`/articles/${post.id}`}>
+			<Link
+				ref={selfDom}
+				className="xuran_bottom"
+				to={`/articles/${post.id}`}
+			>
 				<Card className="cursor-pointer overflow-hidden transition-shadow hover:shadow-lg">
 					<Box className="group relative m-2">
 						{errorImg && (
