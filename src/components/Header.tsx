@@ -25,7 +25,7 @@ export function Header() {
 				}
 			)}
 		>
-			<div className="container flex h-16 items-center justify-between">
+			<Flex align="center" justify="between" className="container h-16">
 				{/* Logo */}
 				<Link
 					to="/"
@@ -76,7 +76,7 @@ export function Header() {
 						发布文章
 					</Link>
 				)}
-			</div>
+			</Flex>
 		</header>
 	);
 }
