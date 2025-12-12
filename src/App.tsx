@@ -20,7 +20,7 @@ import { Flex } from "@radix-ui/themes";
 function App() {
 	return (
 		<Router>
-			<div className="bg-background min-h-screen">
+			<div className="min-h-screen">
 				<Header />
 				<main>
 					<Routes>

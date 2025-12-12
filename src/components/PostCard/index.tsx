@@ -122,7 +122,7 @@ export function PostCard({
 				className="xuran_bottom"
 				to={`/articles/${post.id}`}
 			>
-				<Card className="cursor-pointer overflow-hidden transition-shadow hover:shadow-lg">
+				<Card className="cursor-pointer translate-0 overflow-hidden  hover:shadow-lg hover:-translate-y-5 transition-all duration-500">
 					<Box className="group relative m-2">
 						{errorImg && (
 							<img
@@ -136,7 +136,7 @@ export function PostCard({
 							<Flex
 								align="center"
 								justify="center"
-								className="mb-2 h-45 w-full rounded-md"
+								className="mb-2 h-44 w-full rounded-md"
 							>
 								无封面
 							</Flex>
@@ -150,7 +150,9 @@ export function PostCard({
 						</Text>
 					</Box>
 					<Box>
-						<Box className="py-2 text-sm">{post.excerpt}</Box>
+						<Box className="my-2 text-sm line-clamp-2!">
+							{post.excerpt}
+						</Box>
 					</Box>
 					<Flex direction="column" gap="2" justify="between">
 						<Flex wrap="wrap" gap="2">
