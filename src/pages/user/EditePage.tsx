@@ -28,8 +28,10 @@ const initialProfile: UserProfile = {
 };
 
 export default function ProfileEditPage() {
-	const { token, setToken, setUser } = useUser();
-	const [profile, setProfile] = useState<UserProfile>(initialProfile);
+	const { token, setToken, setUser, user } = useUser();
+	const [profile, setProfile] = useState<UserProfile>(
+		(user || initialProfile) as UserProfile
+	);
 	const [isLoading, setIsLoading] = useState(false);
 	const [avatarPreview, setAvatarPreview] = useState<string>(profile.avatar);
 
