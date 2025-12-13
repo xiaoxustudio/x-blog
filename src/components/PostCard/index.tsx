@@ -126,7 +126,7 @@ export function PostCard({
 					<Box className="group relative m-2">
 						{errorImg && (
 							<img
-								src={post.coverImage}
+								src={post.cover_image}
 								alt={post.title}
 								className=" mb-2 h-45  w-full rounded-md object-cover"
 								onError={() => setErrorImg(false)}

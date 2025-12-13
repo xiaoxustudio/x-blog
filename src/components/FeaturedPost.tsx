@@ -14,7 +14,7 @@ export function FeaturedPost({ post }: FeaturedPostProps) {
 				<div className="md:flex">
 					<div className="md:w-1/2">
 						<img
-							src={post.coverImage}
+							src={post.cover_image}
 							alt={post.title}
 							className="h-64 w-full rounded-md object-cover md:h-full"
 						/>
