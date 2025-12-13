@@ -6,3 +6,5 @@ export const PostsLimitMap = {
 	ExcerptMinLength: 5, // 摘要最小限制
 	ExcerptMaxLength: 50 // 摘要最大限制
 };
+
+export const PAGESIZE_LIMIT_NUM = 5; // 分页限制数量

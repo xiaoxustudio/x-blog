@@ -12,7 +12,7 @@ import {
 	Text,
 	TextArea
 } from "@radix-ui/themes";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import GetPosts from "@/apis/common/posts";
 import { toast } from "sonner";
 import usePostsStore from "@/store/posts";
@@ -24,8 +24,9 @@ import AddComment from "@/apis/post/add_comment";
 import { useRequest } from "ahooks";
 import GetComment from "@/apis/post/get_comment";
 import Comment from "@/components/Comment";
-import type { IComment } from "@/types";
+import type { IComment, ICommentWithChildren } from "@/types";
 import AvatarUser from "@/components/AvatarUser";
+import { CommentContext } from "@/components/Comment/context";
 
 function ArticleDetailPage() {
 	const { id } = useParams<{ id: string }>();
@@ -43,6 +44,10 @@ function ArticleDetailPage() {
 		defaultValues: { content: "" },
 		mode: "onTouched"
 	});
+
+	const [currentComment, setCurrentComment] = useState<IComment | null>(null);
+	const [showChilren, setShowChilrenId] = useState<number | null>(null);
+
 	const { data, run, loading } = useRequest(GetComment, {
 		manual: true,
 		debounceWait: 300
@@ -53,15 +58,26 @@ function ArticleDetailPage() {
 		() => posts.find((post) => post.id === Number.parseInt(id || "")),
 		[id, posts]
 	);
-	const comments = useMemo(() => data?.data?.data.comments || [], [data]);
+	const comments = useMemo(
+		() =>
+			((data?.data?.data.comments || []) as IComment[]).filter(
+				(v) => v.parent_id === 0
+			),
+		[data]
+	);
+
 	const total = useMemo(() => data?.data.data.total || [], [data]);
 
 	const contentValue = useWatch({ name: "content", control });
 	const [pageNum, setPageNum] = useState(0);
 
-	useEffect(() => {
+	const handleUpdateComment = useCallback(() => {
 		if (post) run({ post_id: post.id, page_num: pageNum });
 	}, [pageNum, post, run]);
+
+	useEffect(() => {
+		handleUpdateComment();
+	}, [handleUpdateComment]);
 
 	useEffect(() => {
 		GetPosts().then(({ data }) => {
@@ -141,7 +157,7 @@ function ArticleDetailPage() {
 				</header>
 
 				<img
-					src={post.coverImage}
+					src={post.cover_image}
 					alt={post.title}
 					className="mb-8 h-64 w-full rounded-lg object-cover md:h-96"
 				/>
@@ -150,80 +166,94 @@ function ArticleDetailPage() {
 					<Editor value={post.content} readonly={true}></Editor>
 				</div>
 				{isLoging && (
-					<Flex direction="column" className="mt-4">
-						<Heading size="6">评论</Heading>
-						<Flex className="ml-2">
-							<AvatarUser user={user} />
-							<TextArea
-								{...register("content")}
-								className="w-full"
-								placeholder="请输入评论内容"
-							></TextArea>
-						</Flex>
-						<Flex
-							align="center"
-							justify="end"
-							gap="2"
-							className="w-full ml-2"
-						>
-							<Flex>
-								<Text size="1">
-									当前字符：{contentValue.length}/500
-								</Text>
+					<CommentContext.Provider
+						value={{
+							current: currentComment,
+							showChilrenId: showChilren,
+							setShowChilrenId,
+							setCurrent: setCurrentComment
+						}}
+					>
+						<Flex direction="column" className="mt-4">
+							<Heading size="6">评论</Heading>
+							<Flex className="ml-2">
+								<AvatarUser user={user} />
+								<TextArea
+									{...register("content")}
+									className="w-full"
+									placeholder="请输入评论内容"
+								/>
 							</Flex>
-							{errors.content && (
-								<Text color="red" size="1">
-									{errors.content.message}
-								</Text>
-							)}
-							<Button mode="primary" onClick={onSubmit}>
-								发布
-							</Button>
-						</Flex>
-
-						<Skeleton loading={loading}>
-							<Flex direction="column" className="mt-4">
-								{comments.map((comment: IComment) => (
-									<Comment
-										key={comment.id}
-										comment={comment}
-									/>
-								))}
-							</Flex>
-							<ScrollArea>
-								{total > 0 && total % 5 !== 0 && (
-									<Flex justify="between" align="center">
-										<Button
-											disabled={!(pageNum > 0)}
-											mode="icon"
-											onClick={() =>
-												setPageNum(
-													Math.max(pageNum - 1, 0)
-												)
-											}
-										>
-											<MoveLeft />
-										</Button>
-										<Badge>第{pageNum}页</Badge>
-										<Button
-											disabled={pageNum >= maxPage}
-											mode="icon"
-											onClick={() =>
-												setPageNum(
-													Math.min(
-														pageNum + 1,
-														maxPage
-													)
-												)
-											}
-										>
-											<MoveRight />
-										</Button>
-									</Flex>
+							<Flex
+								align="center"
+								justify="end"
+								gap="2"
+								className="w-full ml-2"
+							>
+								<Flex>
+									<Text size="1">
+										当前字符：{contentValue.length}/500
+									</Text>
+								</Flex>
+								{errors.content && (
+									<Text color="red" size="1">
+										{errors.content.message}
+									</Text>
 								)}
-							</ScrollArea>
-						</Skeleton>
-					</Flex>
+								<Button mode="primary" onClick={onSubmit}>
+									发布
+								</Button>
+							</Flex>
+
+							<Skeleton loading={loading}>
+								<Flex direction="column" className="mt-4">
+									{comments.map((comment: IComment) => (
+										<Comment
+											key={comment.id}
+											comment={
+												comment as ICommentWithChildren
+											}
+											onSubmitFinally={() =>
+												handleUpdateComment()
+											}
+										/>
+									))}
+								</Flex>
+								<ScrollArea>
+									{total > 0 && total % 5 !== 0 && (
+										<Flex justify="between" align="center">
+											<Button
+												disabled={!(pageNum > 0)}
+												mode="icon"
+												onClick={() =>
+													setPageNum(
+														Math.max(pageNum - 1, 0)
+													)
+												}
+											>
+												<MoveLeft />
+											</Button>
+											<Badge>第{pageNum}页</Badge>
+											<Button
+												disabled={pageNum >= maxPage}
+												mode="icon"
+												onClick={() =>
+													setPageNum(
+														Math.min(
+															pageNum + 1,
+															maxPage
+														)
+													)
+												}
+											>
+												<MoveRight />
+											</Button>
+										</Flex>
+									)}
+								</ScrollArea>
+							</Skeleton>
+						</Flex>
+					</CommentContext.Provider>
 				)}
 			</article>
 		</div>

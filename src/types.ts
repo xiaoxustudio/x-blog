@@ -5,25 +5,27 @@ export interface Post {
 	content: string; // markdown
 	author: string; // 作者ID
 	date: string; // 发布时间
-	coverImage: string; // base64 图片文本
+	cover_image: string; // base64 图片文本
 	tags: string; // 标签
 	featured: boolean; // 是否为推荐文章
 }
 
 export interface IComment {
 	id: number;
-	postId: number;
-	userId: string;
+	post_id: number;
+	user_id: string;
 	content: string;
-	parentId: number; // 0 表示顶级评论
-	createdAt: string;
-	updatedAt: string;
+	parent_id: number; // 0 表示顶级评论
+	created_at: string;
+	updated_at: string;
 	user_info: {
 		username: string;
 		nickname: string;
 		avatar: string;
 	};
 }
+
+export type ICommentWithChildren = IComment & { children: IComment[] };
 
 export interface TagMetadata {
 	name: string;
