@@ -4,7 +4,6 @@ import Editor from "@/components/Editor";
 import { Button } from "@/components/Button";
 import {
 	Badge,
-	Box,
 	Flex,
 	Heading,
 	ScrollArea,
@@ -125,7 +124,7 @@ function ArticleDetailPage() {
 
 	return (
 		<div className="container mx-auto max-w-4xl px-4 py-12">
-			<Box className="sticky top-25 z-50 -ml-40 block">
+			<Flex className="sticky top-25 z-50 -ml-40 w-32">
 				<Button
 					mode="clear"
 					className="mb-6"
@@ -134,7 +133,7 @@ function ArticleDetailPage() {
 					<ArrowLeft className="mr-2 h-4 w-4" />
 					返回文章列表
 				</Button>
-			</Box>
+			</Flex>
 
 			<article>
 				<header className="mb-8">
@@ -233,7 +232,7 @@ function ArticleDetailPage() {
 											>
 												<MoveLeft />
 											</Button>
-											<Badge>第{pageNum}页</Badge>
+											<Badge>第 {pageNum} 页</Badge>
 											<Button
 												disabled={pageNum >= maxPage}
 												mode="icon"

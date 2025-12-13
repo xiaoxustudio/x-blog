@@ -73,7 +73,11 @@ function Comment({ comment, parent, onSubmitFinally }: Props) {
 				<Flex>
 					<Flex direction="column">
 						<AvatarUser user={comment.user_info} />
-						{parent && <Text size="1">@{parent.user_id}</Text>}
+						{parent && (
+							<Text className="text-indigo-500" size="1">
+								@{parent.user_id}
+							</Text>
+						)}
 					</Flex>
 					<Heading size="1">{comment.user_id}</Heading>
 				</Flex>

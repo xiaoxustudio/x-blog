@@ -117,11 +117,7 @@ export function PostCard({
 			onError={onError}
 			onSuccess={onSuccess}
 		>
-			<Link
-				ref={selfDom}
-				className="xuran_bottom"
-				to={`/articles/${post.id}`}
-			>
+			<Link ref={selfDom} to={`/articles/${post.id}`}>
 				<Card className="cursor-pointer translate-0 overflow-hidden  hover:shadow-lg hover:-translate-y-5 transition-all duration-500">
 					<Box className="group relative m-2">
 						{errorImg && (
