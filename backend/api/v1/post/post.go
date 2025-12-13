@@ -27,5 +27,6 @@ type (
 		PostId   uint `json:"post_id" v:"required#文章ID不能为空"`
 		PageNum  int  `json:"page_num" v:"required|min:0#页码不能为空|页码必须大于等于0"`
 		PageSize int  `json:"page_size" v:"required|min:0#每页数量不能为空|每页数量必须大于等于0"`
+		ParentId int  `json:"parent_id" v:"required#父级评论ID不能为空"`
 	}
 )
