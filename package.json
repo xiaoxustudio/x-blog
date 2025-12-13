@@ -3,6 +3,20 @@
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
+	"license": "MIT",
+	"author": "xuran",
+	"description": "A blog system based on GoFrame and React",
+	"homepage": "https://github.com/xiaoxustudio/x-blog",
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"bugs": {
+		"url": "https://github.com/xiaoxustudio/x-blog/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/xiaoxustudio/x-blog"
+	},
 	"scripts": {
 		"dev": "concurrently \"pnpm run dev:bk\" \"pnpm run dev:frontend\"",
 		"bk": "cd backend && ",
