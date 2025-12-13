@@ -12,7 +12,7 @@ import AvatarUser from "../AvatarUser";
 import useUser from "@/store/user";
 import { Button } from "../Button";
 import { Menu } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { CommentContext } from "./context";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -62,6 +62,10 @@ function Comment({ comment, parent, onSubmitFinally }: Props) {
 	});
 
 	const isCommentChildren = comment.children.length > 0;
+	const timeArr = useMemo(
+		() => comment.created_at.split(" "),
+		[comment.created_at]
+	);
 
 	return (
 		<>
@@ -91,9 +95,18 @@ function Comment({ comment, parent, onSubmitFinally }: Props) {
 						/>
 					</ScrollArea>
 					<Flex justify="between" gap="2">
-						<Text size="1" className="text-gray-500 text-nowrap">
-							{comment.created_at}
-						</Text>
+						<Flex direction="column" className="w-full text-nowrap">
+							<Text size="1" className="text-gray-500">
+								{timeArr[0]}
+							</Text>
+							<Text
+								size="1"
+								className="text-gray-500"
+								align="right"
+							>
+								{timeArr[1]}
+							</Text>
+						</Flex>
 						<Flex
 							direction="column"
 							align="center"
