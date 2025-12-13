@@ -18,6 +18,11 @@ export interface IComment {
 	parentId: number; // 0 表示顶级评论
 	createdAt: string;
 	updatedAt: string;
+	user_info: {
+		username: string;
+		nickname: string;
+		avatar: string;
+	};
 }
 
 export interface TagMetadata {

@@ -19,6 +19,7 @@ export const Button = ({
 		"ease-in-out!",
 		"cursor-pointer!",
 		"active:scale-95!",
+		"user-select-none!",
 		"my-2!",
 		{
 			/* default */
@@ -41,7 +42,12 @@ export const Button = ({
 	return (
 		<>
 			{mode === "icon" ? (
-				<IconButton type={type} className={classNames} {...props}>
+				<IconButton
+					type={type}
+					variant="surface"
+					className={classNames}
+					{...props}
+				>
 					{children}
 				</IconButton>
 			) : (

@@ -1,7 +1,9 @@
 import type { IUser } from "@/types";
 import { Avatar } from "@radix-ui/themes";
 
-function AvatarUser({ user }: { user: IUser | null | undefined }) {
+type IAvatarUserProps = Pick<IUser, "avatar" | "nickname" | "username">;
+
+function AvatarUser({ user }: { user: IAvatarUserProps | null | undefined }) {
 	const avatarFallback = user?.nickname
 		? user?.nickname.charAt(0).toUpperCase()
 		: user?.username.charAt(0).toUpperCase();
