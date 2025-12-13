@@ -1,13 +1,13 @@
 import { BookOpen, FolderOpen, Home, User } from "lucide-react";
 import { Link } from "react-router";
 import useUser from "@/store/user";
-import { Flex, Text } from "@radix-ui/themes";
+import { Badge, Flex, Text } from "@radix-ui/themes";
 import { useStickyScroll } from "@/hooks/useStickyScroll";
 import { cn } from "@/lib/utils";
 import SearchInput from "./Search";
 
 export function Header() {
-	const { token } = useUser();
+	const { token, user } = useUser();
 	const { isStuck } = useStickyScroll();
 	const textEllipsis = cn(
 		"text-ellipsis overflow-hidden text-nowrap",
@@ -69,12 +69,23 @@ export function Header() {
 				</div>
 
 				{token && (
-					<Link
-						to="/publish"
-						className="hover:text-primary flex items-center text-sm font-medium transition-colors"
-					>
-						发布文章
-					</Link>
+					<>
+						<Flex>
+							<User className="mr-1 inline h-4 w-4" />
+							<Text className="text-sm font-medium transition-colors">
+								{user?.username}
+								<Badge color="green" className="ml-1">
+									已登录
+								</Badge>
+							</Text>
+						</Flex>
+						<Link
+							to="/publish"
+							className="hover:text-primary flex items-center text-sm font-medium transition-colors"
+						>
+							发布文章
+						</Link>
+					</>
 				)}
 			</Flex>
 		</header>

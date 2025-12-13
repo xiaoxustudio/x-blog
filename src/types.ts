@@ -10,6 +10,16 @@ export interface Post {
 	featured: boolean; // 是否为推荐文章
 }
 
+export interface IComment {
+	id: number;
+	postId: number;
+	userId: string;
+	content: string;
+	parentId: number; // 0 表示顶级评论
+	createdAt: string;
+	updatedAt: string;
+}
+
 export interface TagMetadata {
 	name: string;
 	description: string;

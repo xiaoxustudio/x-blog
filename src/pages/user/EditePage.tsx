@@ -6,8 +6,9 @@ import GetInfo from "@/apis/user/info";
 import { useNavigate } from "react-router";
 import UpdateEdit from "@/apis/user/edit";
 import { Button } from "@/components/Button";
-import { Avatar, Box, Card, Flex, Text, TextField } from "@radix-ui/themes";
+import { Box, Card, Flex, Text, TextField } from "@radix-ui/themes";
 import { Calendar, Hash, Mail, Save, Upload, User } from "lucide-react";
+import AvatarUser from "@/components/AvatarUser";
 
 interface UserProfile {
 	id: number;
@@ -33,7 +34,6 @@ export default function ProfileEditPage() {
 		(user || initialProfile) as UserProfile
 	);
 	const [isLoading, setIsLoading] = useState(false);
-	const [avatarPreview, setAvatarPreview] = useState<string>(profile.avatar);
 
 	const navigate = useNavigate();
 
@@ -55,7 +55,6 @@ export default function ProfileEditPage() {
 			const reader = new FileReader();
 			reader.onloadend = () => {
 				const result = reader.result as string;
-				setAvatarPreview(result);
 				setProfile((prev) => ({
 					...prev,
 					avatar: result
@@ -90,7 +89,6 @@ export default function ProfileEditPage() {
 				if (~data.code) {
 					setUser(data.data);
 					setProfile(data.data);
-					setAvatarPreview(data.data.avatar);
 				} else {
 					setToken("");
 					toast.error(data.msg);
@@ -119,14 +117,7 @@ export default function ProfileEditPage() {
 								className="space-y-4"
 							>
 								<div className="group relative">
-									<Avatar
-										className="h-24 w-24"
-										src={avatarPreview}
-										alt="用户头像"
-										fallback={
-											<User className="h-24 w-24" />
-										}
-									/>
+									<AvatarUser user={user} />
 								</div>
 								<Flex align="center" direction="column">
 									<label

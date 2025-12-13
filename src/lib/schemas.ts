@@ -1,6 +1,13 @@
 import { z } from "zod";
 import { PostsLimitMap } from "@/lib/consts";
 
+export const commentSchema = z.object({
+	content: z
+		.string()
+		.min(1, "评论内容不能为空")
+		.max(500, "评论内容不能超过500个字符")
+});
+
 export const loginSchema = z.object({
 	username: z.string().min(3, "用户名最小为3位").max(50, "用户名最大为50位"),
 	password: z.string().min(6, "密码最小为6位").max(50, "用户名最大为50位")

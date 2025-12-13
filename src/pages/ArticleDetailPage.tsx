@@ -1,19 +1,67 @@
 import { useParams, useNavigate } from "react-router";
-import { ArrowLeft, Calendar, User } from "lucide-react";
+import { ArrowLeft, Calendar, MoveLeft, MoveRight, User } from "lucide-react";
 import Editor from "@/components/Editor";
 import { Button } from "@/components/Button";
-import { Badge, Box } from "@radix-ui/themes";
-import { useEffect } from "react";
+import {
+	Badge,
+	Box,
+	Flex,
+	Heading,
+	ScrollArea,
+	Skeleton,
+	Text,
+	TextArea
+} from "@radix-ui/themes";
+import { useEffect, useMemo, useState } from "react";
 import GetPosts from "@/apis/common/posts";
 import { toast } from "sonner";
 import usePostsStore from "@/store/posts";
+import useUser from "@/store/user";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { commentSchema } from "@/lib/schemas";
+import AddComment from "@/apis/post/add_comment";
+import { useRequest } from "ahooks";
+import GetComment from "@/apis/post/get_comment";
+import Comment from "@/components/Comment";
+import type { IComment } from "@/types";
+import AvatarUser from "@/components/AvatarUser";
 
 function ArticleDetailPage() {
 	const { id } = useParams<{ id: string }>();
+	const { user, token } = useUser();
 	const navigate = useNavigate();
 	const { setPosts, posts } = usePostsStore();
+	const {
+		register,
+		formState: { errors },
+		control,
+		handleSubmit,
+		reset
+	} = useForm({
+		resolver: zodResolver(commentSchema),
+		defaultValues: { content: "" },
+		mode: "onTouched"
+	});
+	const { data, run, loading } = useRequest(GetComment, {
+		manual: true,
+		debounceWait: 300
+	});
 
-	const post = posts.find((p) => p.id === Number(id));
+	const isLoging = useMemo(() => token && user, [token, user]);
+	const post = useMemo(
+		() => posts.find((post) => post.id === Number.parseInt(id || "")),
+		[id, posts]
+	);
+	const comments = useMemo(() => data?.data?.data.comments || [], [data]);
+	const total = useMemo(() => data?.data.data.total || [], [data]);
+
+	const contentValue = useWatch({ name: "content", control });
+	const [pageNum, setPageNum] = useState(0);
+
+	useEffect(() => {
+		if (post) run({ post_id: post.id, page_num: pageNum });
+	}, [pageNum, post, run]);
 
 	useEffect(() => {
 		GetPosts().then(({ data }) => {
@@ -38,6 +86,26 @@ function ArticleDetailPage() {
 			</div>
 		);
 	}
+
+	const onSubmit = handleSubmit(() => {
+		AddComment({
+			content: contentValue,
+			parent_id: 0,
+			post_id: post.id
+		}).then(({ data }) => {
+			if (~data.code) {
+				toast.success("评论成功");
+				run({ post_id: post.id, page_num: pageNum });
+				reset();
+			} else {
+				toast.error(data.msg);
+			}
+		});
+	});
+
+	const itemsPerPage = 5;
+	const totalPages = Math.ceil(total / itemsPerPage);
+	const maxPage = totalPages - 1;
 
 	return (
 		<div className="container mx-auto max-w-4xl px-4 py-12">
@@ -81,6 +149,82 @@ function ArticleDetailPage() {
 				<div className="prose prose-lg max-w-none">
 					<Editor value={post.content} readonly={true}></Editor>
 				</div>
+				{isLoging && (
+					<Flex direction="column" className="mt-4">
+						<Heading size="6">评论</Heading>
+						<Flex className="ml-2">
+							<AvatarUser user={user} />
+							<TextArea
+								{...register("content")}
+								className="w-full"
+								placeholder="请输入评论内容"
+							></TextArea>
+						</Flex>
+						<Flex
+							align="center"
+							justify="end"
+							gap="2"
+							className="w-full ml-2"
+						>
+							<Flex>
+								<Text size="1">
+									当前字符：{contentValue.length}/500
+								</Text>
+							</Flex>
+							{errors.content && (
+								<Text color="red" size="1">
+									{errors.content.message}
+								</Text>
+							)}
+							<Button mode="primary" onClick={onSubmit}>
+								发布
+							</Button>
+						</Flex>
+
+						<Skeleton loading={loading}>
+							<Flex direction="column" className="mt-4">
+								{comments.map((comment: IComment) => (
+									<Comment
+										key={comment.id}
+										comment={comment}
+									/>
+								))}
+							</Flex>
+							<ScrollArea>
+								{total > 0 && total % 5 !== 0 && (
+									<Flex justify="between" align="center">
+										<Button
+											disabled={!(pageNum > 0)}
+											mode="icon"
+											onClick={() =>
+												setPageNum(
+													Math.max(pageNum - 1, 0)
+												)
+											}
+										>
+											<MoveLeft />
+										</Button>
+										<Badge>第{pageNum}页</Badge>
+										<Button
+											disabled={pageNum >= maxPage}
+											mode="icon"
+											onClick={() =>
+												setPageNum(
+													Math.min(
+														pageNum + 1,
+														maxPage
+													)
+												)
+											}
+										>
+											<MoveRight />
+										</Button>
+									</Flex>
+								)}
+							</ScrollArea>
+						</Skeleton>
+					</Flex>
+				)}
 			</article>
 		</div>
 	);
