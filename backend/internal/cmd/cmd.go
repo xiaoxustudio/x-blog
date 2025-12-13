@@ -68,6 +68,8 @@ var (
 					controller := post.New()
 					group.POST("/delete", controller.Delete)
 					group.POST("/duplicate", controller.Duplicate)
+					group.POST("/get_comment", controller.GetComment)
+					group.POST("/add_comment", controller.AddComment)
 				})
 			})
 			s.Run()
