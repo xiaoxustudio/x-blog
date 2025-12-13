@@ -87,10 +87,14 @@ function Comment({ comment, parent, onSubmitFinally }: Props) {
 						/>
 					</ScrollArea>
 					<Flex justify="between" gap="2">
-						<Text size="1" className="text-gray-500">
+						<Text size="1" className="text-gray-500 text-nowrap">
 							{comment.created_at}
 						</Text>
-						<Flex direction="column" className="w-full">
+						<Flex
+							direction="column"
+							align="center"
+							className="w-full text-nowrap"
+						>
 							<Flex>
 								{!parent && (
 									<Button
