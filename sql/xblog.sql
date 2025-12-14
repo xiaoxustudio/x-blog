@@ -11,7 +11,7 @@
  Target Server Version : 90100
  File Encoding         : 65001
 
- Date: 14/12/2025 13:12:29
+ Date: 14/12/2025 16:12:03
 */
 
 SET NAMES utf8mb4;
@@ -52,6 +52,7 @@ INSERT INTO `comments` VALUES (11, 1, 'test', '什么东西', 4, '2025-12-13 19:
 INSERT INTO `comments` VALUES (12, 2, 'test', 'asdasdasd', 7, '2025-12-13 21:04:13', '2025-12-13 21:04:13');
 INSERT INTO `comments` VALUES (13, 2, 'test', '我就算说要测试一下嘛HHHHHHH', 0, '2025-12-13 21:09:06', '2025-12-13 21:09:06');
 INSERT INTO `comments` VALUES (14, 5, 'test', '123123123', 0, '2025-12-13 21:09:31', '2025-12-13 21:09:31');
+INSERT INTO `comments` VALUES (15, 1, 'test', '123徐然', 0, '2025-12-14 14:44:46', '2025-12-14 15:48:54');
 
 -- ----------------------------
 -- Table structure for posts
