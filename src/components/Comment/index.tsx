@@ -1,7 +1,8 @@
 import type { ICommentWithChildren } from "@/types";
 import {
+	AlertDialog,
 	Box,
-	DropdownMenu,
+	Dialog,
 	Flex,
 	Heading,
 	ScrollArea,
@@ -10,8 +11,7 @@ import {
 } from "@radix-ui/themes";
 import AvatarUser from "../AvatarUser";
 import useUser from "@/store/user";
-import { Button } from "../Button";
-import { Menu } from "lucide-react";
+import { Delete, Edit } from "lucide-react";
 import { useContext, useMemo } from "react";
 import { CommentContext } from "./context";
 import { useForm, useWatch } from "react-hook-form";
@@ -19,6 +19,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { commentSchema } from "@/lib/schemas";
 import AddComment from "@/apis/post/add_comment";
 import { toast } from "sonner";
+import { Button } from "../Button";
+import DeleteComment from "@/apis/post/delete_comment";
+import EditComment from "@/apis/post/edit_comment";
 
 interface Props {
 	comment: ICommentWithChildren;
@@ -30,7 +33,6 @@ function Comment({ comment, parent, onSubmitFinally }: Props) {
 	const { user } = useUser();
 	const { current, showChilrenId, setShowChilrenId, setCurrent } =
 		useContext(CommentContext);
-
 	const {
 		register,
 		formState: { errors },
@@ -43,7 +45,17 @@ function Comment({ comment, parent, onSubmitFinally }: Props) {
 		mode: "onTouched"
 	});
 
+	const editCommentForm = useForm({
+		resolver: zodResolver(commentSchema),
+		defaultValues: { content: "" },
+		mode: "onTouched"
+	});
+
 	const contentValue = useWatch({ name: "content", control });
+	const contentEditValue = useWatch({
+		name: "content",
+		control: editCommentForm.control
+	});
 
 	const onSubmit = handleSubmit(() => {
 		AddComment({
@@ -60,6 +72,35 @@ function Comment({ comment, parent, onSubmitFinally }: Props) {
 			onSubmitFinally?.(data.code);
 		});
 	});
+
+	const onEditComment = editCommentForm.handleSubmit(() => {
+		EditComment({
+			comment_id: comment.id,
+			post_id: comment.post_id,
+			content: contentEditValue
+		}).then(({ data }) => {
+			if (~data.code) {
+				toast.success("编辑评论成功");
+			} else {
+				toast.error(data.msg);
+			}
+			onSubmitFinally?.(data.code);
+		});
+	});
+
+	const onDelete = () => {
+		DeleteComment({
+			comment_id: comment.id,
+			post_id: comment.post_id
+		}).then(({ data }) => {
+			if (~data.code) {
+				toast.success("删除评论成功");
+			} else {
+				toast.error(data.msg);
+			}
+			onSubmitFinally?.(data.code);
+		});
+	};
 
 	const isCommentChildren = comment.children.length > 0;
 	const timeArr = useMemo(
@@ -112,7 +153,7 @@ function Comment({ comment, parent, onSubmitFinally }: Props) {
 							align="center"
 							className="w-full text-nowrap"
 						>
-							<Flex>
+							<Flex direction="column">
 								{!parent && (
 									<Button
 										size="1"
@@ -129,29 +170,139 @@ function Comment({ comment, parent, onSubmitFinally }: Props) {
 										回复
 									</Button>
 								)}
-
 								{comment.user_id === user?.username && (
-									<DropdownMenu.Root>
-										<DropdownMenu.Trigger>
-											<Button mode="icon" size="1">
-												<Menu size="16" />
-											</Button>
-										</DropdownMenu.Trigger>
-										<DropdownMenu.Content size="1">
-											<DropdownMenu.Item disabled>
-												编辑
-											</DropdownMenu.Item>
+									<>
+										<Dialog.Root>
+											<Dialog.Trigger>
+												<Button
+													variant="ghost"
+													mode="icon"
+													size="1"
+													className="my-0!"
+													onClick={() => {
+														editCommentForm.reset({
+															content:
+																comment.content
+														});
+													}}
+												>
+													<Edit size="16" />
+												</Button>
+											</Dialog.Trigger>
 
-											<DropdownMenu.Separator />
-											<DropdownMenu.Item
-												shortcut="⌘ ⌫"
-												color="red"
-												disabled
+											<Dialog.Content maxWidth="450px">
+												<Dialog.Title>
+													编辑 评论ID：{comment.id}
+												</Dialog.Title>
+												<Dialog.Description
+													size="2"
+													mb="4"
+												>
+													@{comment.user_id}
+												</Dialog.Description>
+
+												<Flex
+													direction="column"
+													gap="3"
+												>
+													<TextArea
+														{...editCommentForm.register(
+															"content"
+														)}
+													/>
+													{editCommentForm.formState
+														.errors.content && (
+														<Text
+															color="red"
+															size="1"
+														>
+															{
+																editCommentForm
+																	.formState
+																	.errors
+																	.content
+																	.message
+															}
+														</Text>
+													)}
+												</Flex>
+
+												<Flex
+													gap="3"
+													mt="4"
+													justify="end"
+												>
+													<Dialog.Close>
+														<Button
+															variant="soft"
+															color="gray"
+														>
+															取消
+														</Button>
+													</Dialog.Close>
+													<Dialog.Close>
+														<Button
+															onClick={
+																onEditComment
+															}
+														>
+															保存
+														</Button>
+													</Dialog.Close>
+												</Flex>
+											</Dialog.Content>
+										</Dialog.Root>
+
+										<AlertDialog.Root>
+											<AlertDialog.Trigger>
+												<Button
+													variant="ghost"
+													mode="icon"
+													size="1"
+													className="my-0! mb-2!"
+												>
+													<Delete size="16" />
+												</Button>
+											</AlertDialog.Trigger>
+											<AlertDialog.Content
+												size="1"
+												maxWidth="300px"
 											>
-												删除
-											</DropdownMenu.Item>
-										</DropdownMenu.Content>
-									</DropdownMenu.Root>
+												<AlertDialog.Title>
+													删除 评论ID：{comment.id}
+												</AlertDialog.Title>
+												<AlertDialog.Description size="2">
+													<Text
+														as="p"
+														trim="both"
+														size="1"
+													>
+														是否删除该评论？(@
+														{comment.user_id}:
+														{comment.content})
+													</Text>
+												</AlertDialog.Description>
+												<Flex gap="3" justify="end">
+													<AlertDialog.Cancel>
+														<Button
+															variant="soft"
+															color="gray"
+														>
+															取消
+														</Button>
+													</AlertDialog.Cancel>
+													<AlertDialog.Action>
+														<Button
+															color="red"
+															onClick={onDelete}
+														>
+															删除
+														</Button>
+													</AlertDialog.Action>
+												</Flex>
+											</AlertDialog.Content>
+										</AlertDialog.Root>
+									</>
 								)}
 							</Flex>
 							{isCommentChildren && (
@@ -209,6 +360,7 @@ function Comment({ comment, parent, onSubmitFinally }: Props) {
 							key={item.id}
 							comment={item as ICommentWithChildren}
 							parent={comment}
+							onSubmitFinally={onSubmitFinally}
 						/>
 					))}
 				</Box>
