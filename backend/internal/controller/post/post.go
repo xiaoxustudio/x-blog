@@ -278,3 +278,52 @@ func (*Post) AddComment(req *ghttp.Request) {
 
 	req.Response.WriteJsonExit(rtool.ToReturn(0, "添加评论成功", nil))
 }
+func (*Post) EditComment(req *ghttp.Request) {
+	xtx := req.Context()
+
+	var data v1.PostEditCommentReq
+	if err := req.Parse(&data); err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "请求体格式错误", err.Error()))
+		return
+	}
+	if err := g.Validator().Data(&data).Run(xtx); err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "参数校验失败", err.Maps()))
+		return
+	}
+
+	md := dao.Comments.Ctx(xtx)
+	res, err := md.Where("post_id = ?", data.PostId).Where("id = ?", data.CommentId).Update(g.Map{
+		"content": data.Content,
+	})
+
+	if err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "编辑评论失败", err.Error()))
+	}
+	if r, err := res.RowsAffected(); r == 0 {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "编辑评论失败", err.Error()))
+	}
+
+	req.Response.WriteJsonExit(rtool.ToReturn(0, "编辑评论成功", nil))
+}
+
+func (*Post) DeleteComment(req *ghttp.Request) {
+	ctx := req.Context()
+
+	var data v1.PostDeleteCommentReq
+	if err := req.Parse(&data); err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "请求体格式错误", err.Error()))
+		return
+	}
+	if err := g.Validator().Data(&data).Run(ctx); err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "参数校验失败", err.Maps()))
+		return
+	}
+
+	md := dao.Comments.Ctx(ctx)
+	if _, err := md.Where("post_id = ?", data.PostId).Where("id = ?", data.CommentId).Delete(); err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "删除评论失败", err.Error()))
+		return
+	}
+
+	req.Response.WriteJsonExit(rtool.ToReturn(0, "删除评论成功", nil))
+}

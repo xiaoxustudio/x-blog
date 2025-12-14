@@ -29,4 +29,17 @@ type (
 		PageSize int  `json:"page_size" v:"required|min:0#每页数量不能为空|每页数量必须大于等于0"`
 		ParentId int  `json:"parent_id" v:"required#父级评论ID不能为空"`
 	}
+
+	PostEditCommentReq struct {
+		g.Meta    `path:"/post/edit_comment" method:"POST" summary:"编辑评论"`
+		PostId    uint   `json:"post_id" v:"required#文章ID不能为空"`
+		CommentId uint   `json:"comment_id" v:"required#评论ID不能为空"`
+		Content   string `json:"content" v:"required#评论内容不能为空"`
+	}
+
+	PostDeleteCommentReq struct {
+		g.Meta    `path:"/post/delete_comment" method:"POST" summary:"删除评论"`
+		PostId    uint `json:"post_id" v:"required#文章ID不能为空"`
+		CommentId uint `json:"comment_id" v:"required#评论ID不能为空"`
+	}
 )

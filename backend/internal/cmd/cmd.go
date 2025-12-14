@@ -70,6 +70,8 @@ var (
 					group.POST("/duplicate", controller.Duplicate)
 					group.POST("/get_comment", controller.GetComment)
 					group.POST("/add_comment", controller.AddComment)
+					group.POST("/edit_comment", controller.EditComment)
+					group.POST("/delete_comment", controller.DeleteComment)
 				})
 			})
 			s.Run()
