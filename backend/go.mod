@@ -3,14 +3,11 @@ module backend
 go 1.24.0
 
 require (
+	github.com/fogleman/gg v1.3.0
 	github.com/gogf/gf/contrib/drivers/mysql/v2 v2.9.5
 	github.com/gogf/gf/v2 v2.9.5
 	github.com/golang-jwt/jwt/v5 v5.3.0
-)
-
-require (
-	github.com/fogleman/gg v1.3.0 // indirect
-	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 )
 
 require (
