@@ -1,18 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import Login from "@/apis/user/login";
 import { Button } from "@/components/Button";
-import { loginSchema } from "@/lib/schemas";
+import { loginSchema, type LoginFormData } from "@/lib/schemas";
 import useUser from "@/store/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Flex, Card, TextField, Heading, Text, Box } from "@radix-ui/themes";
 import { useNavigate } from "react-router";
-
-interface FormProps {
-	username: string;
-	password: string;
-}
+import GetCode from "@/apis/valid/get_code";
 
 function TheLogin() {
 	const navigate = useNavigate();
@@ -20,22 +16,34 @@ function TheLogin() {
 		register,
 		handleSubmit,
 		formState: { errors }
-	} = useForm<FormProps>({
+	} = useForm({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
 			username: "",
-			password: ""
+			password: "",
+			code: ""
 		},
 		mode: "onTouched"
 	});
 
 	const [isLoading, setIsLoading] = useState(false);
+	const [imageCodeString, setImageCodeString] = useState("");
 
 	const { setToken } = useUser();
 
-	const onSubmit = ({ username, password }: FormProps) => {
+	const updateCode = () => {
+		GetCode().then(({ data }) => {
+			if (~data.code) {
+				setImageCodeString(data.data);
+			} else {
+				toast.error(data.msg);
+			}
+		});
+	};
+
+	const onSubmit = ({ username, password, code }: LoginFormData) => {
 		setIsLoading(true);
-		Login({ username, password })
+		Login({ username, password, code })
 			.then(({ data }) => {
 				if (~data.code) {
 					setToken(data.data);
@@ -49,6 +57,10 @@ function TheLogin() {
 				setIsLoading(false);
 			});
 	};
+
+	useEffect(() => {
+		updateCode();
+	}, []);
 
 	return (
 		<Flex
@@ -96,6 +108,29 @@ function TheLogin() {
 								</Text>
 							)}
 						</div>
+						<Flex direction="column" className="space-y-2">
+							<Flex className="w-full">
+								<TextField.Root
+									{...register("code")}
+									id="code"
+									type="text"
+									placeholder="验证码"
+									required
+									className="w-full"
+								/>
+								<img
+									src={`data:image/png;base64,${imageCodeString}`}
+									alt="captcha"
+									className="w-20 h-10 cursor-pointer"
+									onClick={() => updateCode()}
+								></img>
+							</Flex>
+							{errors.code && (
+								<Text color="red" size="1">
+									{errors.code.message}
+								</Text>
+							)}
+						</Flex>
 					</Box>
 					<Flex direction="column" className="space-y-4">
 						<Button

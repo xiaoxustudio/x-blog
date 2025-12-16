@@ -10,8 +10,10 @@ export const commentSchema = z.object({
 
 export const loginSchema = z.object({
 	username: z.string().min(3, "用户名最小为3位").max(50, "用户名最大为50位"),
-	password: z.string().min(6, "密码最小为6位").max(50, "用户名最大为50位")
+	password: z.string().min(6, "密码最小为6位").max(50, "用户名最大为50位"),
+	code: z.string().min(4, "验证码最小为4位").max(4, "验证码最大为4位")
 });
+export type LoginFormData = z.infer<typeof loginSchema>;
 
 export const registerSchema = z.object({
 	username: z.string().min(3, "用户名最小为3位").max(50, "用户名最大为50位"),
