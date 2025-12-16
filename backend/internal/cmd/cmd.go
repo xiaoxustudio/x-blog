@@ -4,6 +4,7 @@ import (
 	"backend/internal/controller/common"
 	"backend/internal/controller/post"
 	"backend/internal/controller/user"
+	"backend/internal/controller/valid"
 	"backend/internal/middleware"
 	"context"
 
@@ -37,6 +38,10 @@ var (
 				group.Middleware(Middleware)
 
 				// 不需要认证的路由
+				group.Group("/valid", func(group *ghttp.RouterGroup) {
+					controller := valid.New()
+					group.POST("/gen", controller.Generate)
+				})
 				group.Group("/post", func(group *ghttp.RouterGroup) {
 					controller := post.New()
 					group.POST("/search", controller.Search)

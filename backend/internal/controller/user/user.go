@@ -5,6 +5,7 @@ import (
 	"backend/internal/consts"
 	"backend/internal/dao"
 	"backend/internal/model/entity"
+	"backend/utility/rdata"
 	"backend/utility/rtool"
 	"context"
 	"strings"
@@ -51,6 +52,12 @@ func (u *User) Login(req *ghttp.Request) {
 	if user.Id == 0 {
 		req.Response.WriteJsonExit(rtool.ToReturn(-1, "用户不存在或密码错误", nil))
 	}
+
+	_, err = rdata.GetInstance().GetCode(data.Code)
+	if err != nil {
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "验证码错误", nil))
+	}
+	rdata.GetInstance().RemoveCode(data.Code)
 
 	jwtSecret, _ := g.Cfg().Get(ctx, "jwt.secret")
 
