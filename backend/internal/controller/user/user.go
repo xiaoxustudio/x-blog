@@ -107,7 +107,7 @@ func (u *User) Register(req *ghttp.Request) {
 		req.Response.WriteJsonExit(rtool.ToReturn(-1, "数据库查询错误", err.Error()))
 	}
 	if len(user) > 0 {
-		req.Response.WriteJsonExit(rtool.ToReturn(-1, "用户已存在", username))
+		req.Response.WriteJsonExit(rtool.ToReturn(-1, "用户或邮箱已存在", username))
 	}
 
 	md.Clone().Insert(entity.Users{
